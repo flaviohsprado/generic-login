@@ -1,7 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { User } from 'src/entities/user.entity';
-import { CreateUserDTO } from './dto/user.dto';
+import { CreateUserDTO } from '../../dto/user.dto';
+import { IUser } from '../../interfaces/user.interface';
 
 @Injectable()
 export class UserService {
@@ -10,15 +11,71 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  get(): string {
-    return "Get [{ name: 'flávio' }]";
-  }
-
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<IUser[]> {
     return await this.userRepository.find();
   }
 
-  async create(user: CreateUserDTO): Promise<User> {
+  async findById(id: string): Promise<IUser> {
+    return await this.userRepository.findOne({
+      where: { id },
+    });
+  }
+
+  async findByEmail(email: string): Promise<IUser> {
+    return await this.userRepository.findOne({
+      where: { email },
+    });
+  }
+
+  async findByUsername(username: string): Promise<IUser> {
+    return await this.userRepository.findOne({
+      where: { username },
+    });
+  }
+
+  async findByFirstName(firstName: string): Promise<IUser> {
+    return await this.userRepository.findOne({
+      where: { firstName },
+    });
+  }
+
+  async findByLastName(lastName: string): Promise<IUser> {
+    return await this.userRepository.findOne({
+      where: { lastName },
+    });
+  }
+
+  async findByBirthDate(dateOfBirth: String): Promise<IUser> {
+    return await this.userRepository.findOne({
+      where: { dateOfBirth },
+    });
+  }
+
+  async findByPhoneNumber(phoneNumber: String): Promise<IUser> {
+    return await this.userRepository.findOne({
+      where: { phoneNumber },
+    });
+  }
+
+  async findByAddress(address: String): Promise<IUser> {
+    return await this.userRepository.findOne({
+      where: { address },
+    });
+  }
+
+  async findByCity(city: String): Promise<IUser> {
+    return await this.userRepository.findOne({
+      where: { city },
+    });
+  }
+
+  async findByCountry(country: String): Promise<IUser> {
+    return await this.userRepository.findOne({
+      where: { country },
+    });
+  }
+
+  async create(user: CreateUserDTO): Promise<IUser> {
     return await this.userRepository.save(user);
   }
 }

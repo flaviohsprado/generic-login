@@ -6,7 +6,7 @@ export class User {
   id: string;
 
   @Column({ length: 250 })
-  name: string;
+  username: string;
 
   @Column({ length: 250 })
   password: string;
@@ -20,8 +20,8 @@ export class User {
   @Column({ length: 250, nullable: true })
   lastName?: string;
 
-  @Column({ nullable: true })
-  dateOfBirth?: Date;
+  @Column({ nullable: true, type: 'date' })
+  dateOfBirth?: string;
 
   @Column({ nullable: true })
   phoneNumber?: string;
