@@ -2,12 +2,12 @@ import { uuid } from 'uuidv4';
 
 export class CreateUserDTO {
   id: string;
-  name: string;
+  username: string;
   password: string;
   email: string;
   firstName?: string;
   lastName?: string;
-  dateOfBirth?: Date;
+  dateOfBirth?: string;
   phoneNumber?: string;
   address?: string;
   city?: string;
@@ -16,11 +16,21 @@ export class CreateUserDTO {
   createdAt: Date;
   updatedAt: Date;
 
-  constructor(props: Omit<CreateUserDTO, 'id'>, id?: string) {
+  constructor(
+    props: Omit<
+      CreateUserDTO,
+      'id' | 'dateOfBirth' | 'createdAt' | 'updatedAt'
+    >,
+    id?: string,
+  ) {
     Object.assign(this, props);
 
     if (!id) {
       this.id = uuid();
+      this.createdAt = new Date();
+      this.updatedAt = new Date();
+    } else {
+      this.updatedAt = new Date();
     }
   }
 }
