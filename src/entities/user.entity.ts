@@ -1,5 +1,4 @@
 import { Entity, Column, PrimaryColumn } from 'typeorm';
-import { uuid } from 'uuidv4';
 
 @Entity()
 export class User {
@@ -7,7 +6,7 @@ export class User {
   id: string;
 
   @Column({ length: 250 })
-  username: string;
+  name: string;
 
   @Column({ length: 250 })
   password: string;
@@ -15,44 +14,36 @@ export class User {
   @Column({ length: 500 })
   email: string;
 
-  @Column({ length: 250 })
+  @Column({ length: 250, nullable: true })
   firstName?: string;
 
-  @Column({ length: 250 })
+  @Column({ length: 250, nullable: true })
   lastName?: string;
 
-  @Column()
+  @Column({ nullable: true })
   dateOfBirth?: Date;
 
-  @Column()
+  @Column({ nullable: true })
   phoneNumber?: string;
 
-  @Column({ length: 500 })
+  @Column({ length: 500, nullable: true })
   address?: string;
 
-  @Column()
+  @Column({ nullable: true })
   city?: string;
 
-  @Column()
+  @Column({ nullable: true })
   country?: string;
 
-  @Column()
+  @Column({ nullable: true })
   token?: string;
 
-  @Column()
-  company: string;
+  @Column({ nullable: true })
+  company?: string;
 
-  @Column()
+  @Column({ nullable: true })
   createdAt: Date;
 
-  @Column()
+  @Column({ nullable: true })
   updatedAt: Date;
-
-  constructor(props: Omit<User, 'id'>, id?: string) {
-    Object.assign(this, props);
-
-    if (!id) {
-      this.id = uuid();
-    }
-  }
 }
