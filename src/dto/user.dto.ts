@@ -1,6 +1,6 @@
 import { uuid } from 'uuidv4';
 
-export class CreateUserDTO {
+export class UserDTO {
   id: string;
   username: string;
   password: string;
@@ -17,10 +17,7 @@ export class CreateUserDTO {
   updatedAt: Date;
 
   constructor(
-    props: Omit<
-      CreateUserDTO,
-      'id' | 'dateOfBirth' | 'createdAt' | 'updatedAt'
-    >,
+    props: Omit<UserDTO, 'id' | 'dateOfBirth' | 'createdAt' | 'updatedAt'>,
     id?: string,
   ) {
     Object.assign(this, props);
