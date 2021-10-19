@@ -8,7 +8,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { CreateUserDTO } from '../../dto/user.dto';
+import { UserDTO } from '../../dto/user.dto';
 import { IUser } from '../../interfaces/user.interface';
 import { UserService } from './user.service';
 import { getFormatedDateFromDate } from 'src/utils/date';
@@ -76,8 +76,18 @@ export class UserController {
   }
 
   @Post()
-  async create(@Body() createUserDTO: CreateUserDTO): Promise<IUser> {
-    const user: CreateUserDTO = new CreateUserDTO(createUserDTO);
+  async create(@Body() createUserDTO: UserDTO): Promise<IUser> {
+    const user: UserDTO = new UserDTO(createUserDTO);
     return this.userService.create(user);
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() user: IUser): Promise<IUser> {
+    return await this.userService.update(id, user);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string): Promise<void> {
+    await this.userService.destroy(id);
   }
 }
