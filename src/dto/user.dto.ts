@@ -1,4 +1,5 @@
 import { uuid } from 'uuidv4';
+import Criptography from 'src/services/Criptography';
 
 export class UserDTO {
   id: string;
@@ -17,7 +18,7 @@ export class UserDTO {
   updatedAt: Date;
 
   constructor(
-    props: Omit<UserDTO, 'id' | 'dateOfBirth' | 'createdAt' | 'updatedAt'>,
+    props: Omit<UserDTO, 'id' | 'createdAt' | 'updatedAt'>,
     id?: string,
   ) {
     Object.assign(this, props);
@@ -26,8 +27,11 @@ export class UserDTO {
       this.id = uuid();
       this.createdAt = new Date();
       this.updatedAt = new Date();
-    } else {
-      this.updatedAt = new Date();
     }
+  }
+
+  async encryptPassword(): Promise<UserDTO> {
+    this.password = await Criptography.encrypt(this.password);
+    return this;
   }
 }
