@@ -77,13 +77,14 @@ export class UserController {
 
   @Post()
   async create(@Body() createUserDTO: UserDTO): Promise<IUser> {
-    const user: UserDTO = new UserDTO(createUserDTO);
+    const user: UserDTO = await new UserDTO(createUserDTO).encryptPassword();
     return this.userService.create(user);
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() user: IUser): Promise<IUser> {
-    return await this.userService.update(id, user);
+  async update(@Param('id') id: string, @Body() user: UserDTO): Promise<IUser> {
+    const updateUser = await new UserDTO(user).encryptPassword();
+    return await this.userService.update(id, updateUser);
   }
 
   @Delete(':id')
