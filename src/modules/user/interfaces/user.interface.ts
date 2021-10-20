@@ -11,6 +11,8 @@ export interface IUser {
   city?: string;
   country?: string;
   token?: string;
+  companyId?: string;
+  companyName?: string;
   createdAt: Date;
   updatedAt: Date;
 }

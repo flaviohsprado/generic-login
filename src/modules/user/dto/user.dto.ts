@@ -1,5 +1,5 @@
 import { uuid } from 'uuidv4';
-import Criptography from 'src/services/Criptography';
+import Criptography from 'src/services/criptography.service';
 
 export class UserDTO {
   id: string;

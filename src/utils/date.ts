@@ -8,7 +8,7 @@ export function getDateFromString(date: string): Date {
   return new Date(year, month, day);
 }
 
-export function getFormatedDateFromDate(date: Date): String {
+export function getFormatedDateFromDate(date: Date): string {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
