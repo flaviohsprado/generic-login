@@ -1,19 +1,21 @@
 import {
   Controller,
   Get,
-  Query,
   Post,
   Body,
   Put,
   Param,
   Delete,
+  UseGuards,
+  Headers,
 } from '@nestjs/common';
 import { UserDTO } from './dto/user.dto';
 import { IUser } from './interfaces/user.interface';
 import { UserService } from './user.service';
 import { getFormatedDateFromDate } from 'src/utils/date';
+import { JwtAuthGuard } from 'src/services/jwt/jwt-auth.guard';
 
-@Controller('users')
+@Controller('private/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -81,8 +83,14 @@ export class UserController {
     return this.userService.create(user);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
-  async update(@Param('id') id: string, @Body() user: UserDTO): Promise<IUser> {
+  async update(
+    @Param('id') id: string,
+    @Body() user: UserDTO,
+    @Headers() headers: any,
+  ): Promise<IUser> {
+    console.log(headers);
     const updateUser = await new UserDTO(user).encryptPassword();
     return await this.userService.update(id, updateUser);
   }

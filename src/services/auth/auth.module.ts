@@ -2,10 +2,11 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserModule } from '../../modules/user/user.module';
 import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './local.strategy';
 import { JwtModule } from '@nestjs/jwt';
+import { LocalStrategy } from './local.strategy';
+import { AuthController } from 'src/modules/auth/auth.controller';
 import { JwtStrategy } from '../jwt/jwt.strategy';
-import { UserService } from 'src/modules/user/user.service';
+
 require('dotenv').config();
 
 @Module({
@@ -17,7 +18,8 @@ require('dotenv').config();
       signOptions: { expiresIn: '86400s' },
     }),
   ],
-  providers: [UserService, AuthService, LocalStrategy, JwtStrategy],
+  controllers: [AuthController],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}

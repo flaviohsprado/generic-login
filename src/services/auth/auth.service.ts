@@ -1,35 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from '../../modules/user/user.service';
+import { UserService } from 'src/modules/user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import Criptography from '../criptography.service';
-import { IUser } from 'src/modules/user/interfaces/user.interface';
-import { IAuth, IAuthCredentials } from 'src/interfaces/auth.interface';
+import CryptographyService from 'src/services/criptography.service';
+import { IAuth } from 'src/interfaces/auth.interface';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UserService,
+    private userService: UserService,
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(
-    username: string,
-    password: string,
-  ): Promise<Omit<IUser, 'password'>> {
-    const user = await this.usersService.findByKey('username', username);
+  async validateUser(username: string, password: string): Promise<any> {
+    const user = await this.userService.findByKey('username', username);
 
-    const decryptedPassword = await Criptography.decrypt(user.password);
+    const decriptedPassword: string = await CryptographyService.decrypt(
+      password,
+    );
 
-    if (user && decryptedPassword === password) {
+    if (user && user.password === decriptedPassword) {
       const { password, ...result } = user;
+
       return result;
     }
-
     return null;
   }
 
   async login(user: IAuth) {
-    const payload: IAuth = {
+    const payload = {
       id: user.id,
       username: user.username,
       email: user.email,

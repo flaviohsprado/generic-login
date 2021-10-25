@@ -8,7 +8,7 @@ import {
 } from 'crypto';
 import { promisify } from 'util';
 
-class Cryptography {
+class CryptographyService {
   private readonly alg: string;
   private readonly iv: Buffer;
   private key: CipherKey;
@@ -51,15 +51,15 @@ class Cryptography {
   async decrypt(text: string): Promise<string> {
     await this.setDecipherConfigurations();
 
-    const encryptedTextBuffer = Buffer.from(text, 'hex');
+    const encryptedTextBuffer = Buffer.from(text);
 
     const decryptedText = Buffer.concat([
       this.decipher.update(encryptedTextBuffer),
       this.decipher.final(),
     ]);
 
-    return decryptedText.toString();
+    return decryptedText.toString('hex');
   }
 }
 
-export default new Cryptography();
+export default new CryptographyService();

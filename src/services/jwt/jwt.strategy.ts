@@ -2,7 +2,6 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { IAuth } from 'src/interfaces/auth.interface';
-require('dotenv').config();
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -16,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: IAuth) {
     return {
-      userId: payload.id,
+      id: payload.id,
       username: payload.username,
       email: payload.email,
       companyId: payload.companyId,
