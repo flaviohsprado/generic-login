@@ -1,16 +1,18 @@
 export interface IUser {
   id: string;
-  name: string;
+  username: string;
   password: string;
   email: string;
   firstName?: string;
   lastName?: string;
-  dateOfBirth?: Date;
+  dateOfBirth?: string;
   phoneNumber?: string;
   address?: string;
   city?: string;
   country?: string;
   token?: string;
+  companyId?: string;
+  companyName?: string;
   createdAt: Date;
   updatedAt: Date;
 }
