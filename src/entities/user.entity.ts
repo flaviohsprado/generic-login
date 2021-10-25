@@ -39,7 +39,10 @@ export class User {
   token?: string;
 
   @Column({ nullable: true })
-  company?: string;
+  companyId?: string;
+
+  @Column({ nullable: true })
+  companyName?: string;
 
   @Column({ nullable: true })
   createdAt: Date;

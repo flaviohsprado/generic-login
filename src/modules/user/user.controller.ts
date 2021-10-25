@@ -1,19 +1,21 @@
 import {
   Controller,
   Get,
-  Query,
   Post,
   Body,
   Put,
   Param,
   Delete,
+  UseGuards,
+  Headers,
 } from '@nestjs/common';
-import { UserDTO } from '../../dto/user.dto';
-import { IUser } from '../../interfaces/user.interface';
+import { UserDTO } from './dto/user.dto';
+import { IUser } from './interfaces/user.interface';
 import { UserService } from './user.service';
 import { getFormatedDateFromDate } from 'src/utils/date';
+import { JwtAuthGuard } from 'src/services/jwt/jwt-auth.guard';
 
-@Controller('users')
+@Controller('private/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -24,55 +26,55 @@ export class UserController {
 
   @Get(':id')
   async findById(@Param('id') id: string): Promise<IUser> {
-    return await this.userService.findById(id);
+    return await this.userService.findByKey('id', id);
   }
 
   @Get('/email/:email')
   async findByEmail(@Param('email') email: string): Promise<IUser> {
-    return await this.userService.findByEmail(email);
+    return await this.userService.findByKey('email', email);
   }
 
   @Get('/name/:username')
   async findByUsername(@Param('username') username: string): Promise<IUser> {
-    return await this.userService.findByUsername(username);
+    return await this.userService.findByKey('username', username);
   }
 
   @Get('/firstName/:firstName')
   async findByFirstName(@Param('firstName') firstName: string): Promise<IUser> {
-    return await this.userService.findByFirstName(firstName);
+    return await this.userService.findByKey('firstName', firstName);
   }
 
   @Get('/lastName/:lastName')
   async findByLastName(@Param('lastName') lastName: string): Promise<IUser> {
-    return await this.userService.findByLastName(lastName);
+    return await this.userService.findByKey('lastName', lastName);
   }
 
   @Get('/birthDate/:birthDate')
   async findByBirthDate(@Param('birthDate') birthDate: string): Promise<IUser> {
-    const dateOfBirth: String = getFormatedDateFromDate(new Date(birthDate));
-    return await this.userService.findByBirthDate(dateOfBirth);
+    const dateOfBirth: string = getFormatedDateFromDate(new Date(birthDate));
+    return await this.userService.findByKey('dateOfBirth', dateOfBirth);
   }
 
   @Get('/phoneNumber/:phoneNumber')
   async findByPhoneNumber(
     @Param('phoneNumber') phoneNumber: string,
   ): Promise<IUser> {
-    return await this.userService.findByPhoneNumber(phoneNumber);
+    return await this.userService.findByKey('phoneNumber', phoneNumber);
   }
 
   @Get('/address/:address')
   async findByAddress(@Param('address') address: string): Promise<IUser> {
-    return await this.userService.findByAddress(address);
+    return await this.userService.findByKey('address', address);
   }
 
   @Get('/city/:city')
   async findByCity(@Param('city') city: string): Promise<IUser> {
-    return await this.userService.findByCity(city);
+    return await this.userService.findByKey('city', city);
   }
 
   @Get('/country/:country')
   async findByCountry(@Param('country') country: string): Promise<IUser> {
-    return await this.userService.findByCountry(country);
+    return await this.userService.findByKey('country', country);
   }
 
   @Post()
@@ -81,8 +83,14 @@ export class UserController {
     return this.userService.create(user);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
-  async update(@Param('id') id: string, @Body() user: UserDTO): Promise<IUser> {
+  async update(
+    @Param('id') id: string,
+    @Body() user: UserDTO,
+    @Headers() headers: any,
+  ): Promise<IUser> {
+    console.log(headers);
     const updateUser = await new UserDTO(user).encryptPassword();
     return await this.userService.update(id, updateUser);
   }
