@@ -3,33 +3,66 @@ import { Repository } from 'typeorm';
 import { User } from 'src/entities/user.entity';
 import { UserDTO } from './dto/user.dto';
 import { IUser } from './interfaces/user.interface';
+import FileUpload from '../../utils/file';
+import { FileDTO } from '../file/dto/file.dto';
+//import { File } from 'src/entities/file.entity';
+import { FileService } from '../file/file.service';
+import { IFile } from 'src/interfaces/file.interface';
 
 @Injectable()
 export class UserService {
   constructor(
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
+    private fileRepository: FileService,
   ) {}
 
   async findAll(): Promise<IUser[]> {
-    return await this.userRepository.find();
+    return await this.userRepository.find({ relations: ['file'] });
   }
 
   async findByKey(key: string, value: string): Promise<IUser> {
     return await this.userRepository.findOne({
       where: { [key]: value },
+      relations: ['file'],
     });
   }
 
-  async create(user: UserDTO): Promise<IUser> {
+  async create(user: UserDTO, files: FileDTO[]): Promise<IUser> {
+    const filesPaths = await FileUpload.upload(files, user.id, 'user');
+
+    await this.fileRepository.create(filesPaths);
+
     return await this.userRepository.save(user);
   }
 
-  async update(id: string, user: UserDTO): Promise<IUser> {
-    return await this.userRepository.save({ ...user, id });
+  async update(id: string, user: UserDTO, files: FileDTO[]): Promise<IUser> {
+    const userAvatar: IFile = await this.fileRepository.findByKey(
+      'ownerId',
+      id,
+    );
+
+    if (userAvatar) {
+      await FileUpload.delete([userAvatar.key]);
+      await this.fileRepository.destroy([userAvatar]);
+
+      const filesPaths = await FileUpload.upload(files, user.id, 'user');
+      await this.fileRepository.create(filesPaths);
+    }
+
+    await this.userRepository.save({ ...user, id });
+
+    return await this.userRepository.findOne(id);
   }
 
   async destroy(id: string): Promise<void> {
+    const userAvatar: IFile = await this.fileRepository.findByKey(
+      'ownerId',
+      id,
+    );
+
+    await FileUpload.delete([userAvatar.key]);
+
     await this.userRepository.delete(id);
   }
 }
