@@ -1,6 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { File } from 'src/entities/file.entity';
 import { FileDTO } from './dto/file.dto';
 import { IFile } from 'src/interfaces/file.interface';
 
@@ -8,7 +7,7 @@ import { IFile } from 'src/interfaces/file.interface';
 export class FileService {
   constructor(
     @Inject('FILE_REPOSITORY')
-    private fileRepository: Repository<File>,
+    private fileRepository: Repository<IFile>,
   ) {}
 
   async findByKey(key: string, value: string): Promise<IFile> {

@@ -18,14 +18,23 @@ export class UserService {
   ) {}
 
   async findAll(): Promise<IUser[]> {
-    return await this.userRepository.find({ relations: ['file'] });
+    const users = await this.userRepository.find();
+
+    for (const user of users) {
+      user.file = await this.fileRepository.findByKey('ownerId', user.id);
+    }
+
+    return users;
   }
 
   async findByKey(key: string, value: string): Promise<IUser> {
-    return await this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { [key]: value },
-      relations: ['file'],
     });
+
+    user.file = await this.fileRepository.findByKey('ownerId', user.id);
+
+    return user;
   }
 
   async create(user: UserDTO, files: FileDTO[]): Promise<IUser> {
@@ -42,11 +51,13 @@ export class UserService {
       id,
     );
 
-    if (userAvatar) {
-      await FileUpload.delete([userAvatar.key]);
-      await this.fileRepository.destroy([userAvatar]);
+    if (files.length) {
+      if (userAvatar) {
+        await FileUpload.delete([userAvatar.key]);
+        await this.fileRepository.destroy([userAvatar]);
+      }
 
-      const filesPaths = await FileUpload.upload(files, user.id, 'user');
+      const filesPaths = await FileUpload.upload(files, id, 'user');
       await this.fileRepository.create(filesPaths);
     }
 
@@ -62,6 +73,8 @@ export class UserService {
     );
 
     await FileUpload.delete([userAvatar.key]);
+
+    await this.fileRepository.destroy([userAvatar]);
 
     await this.userRepository.delete(id);
   }

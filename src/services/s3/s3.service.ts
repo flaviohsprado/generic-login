@@ -79,8 +79,4 @@ export class S3Service {
       })
       .promise();
   }
-
-  public generateFileKey(file: any, timestamp: number): string {
-    return `${file.name}-${timestamp}.${file.extension}`;
-  }
 }
