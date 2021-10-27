@@ -1,3 +1,5 @@
+import { File } from 'src/entities/file.entity';
+
 export interface IUser {
   id: string;
   username: string;
@@ -15,4 +17,5 @@ export interface IUser {
   companyName?: string;
   createdAt: Date;
   updatedAt: Date;
+  avatar?: File;
 }

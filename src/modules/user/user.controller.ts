@@ -8,12 +8,17 @@ import {
   Delete,
   UseGuards,
   Headers,
+  UseInterceptors,
+  UploadedFiles,
+  Req,
 } from '@nestjs/common';
 import { UserDTO } from './dto/user.dto';
 import { IUser } from './interfaces/user.interface';
 import { UserService } from './user.service';
 import { getFormatedDateFromDate } from 'src/utils/date';
 import { JwtAuthGuard } from 'src/services/jwt/jwt-auth.guard';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileDTO } from '../file/dto/file.dto';
 
 @Controller('private/users')
 export class UserController {
@@ -78,21 +83,25 @@ export class UserController {
   }
 
   @Post()
-  async create(@Body() createUserDTO: UserDTO): Promise<IUser> {
+  @UseInterceptors(FilesInterceptor('files'))
+  async create(
+    @UploadedFiles() files: FileDTO[],
+    @Body() createUserDTO: UserDTO,
+  ): Promise<IUser> {
     const user: UserDTO = await new UserDTO(createUserDTO).encryptPassword();
-    return this.userService.create(user);
+    return this.userService.create(user, files);
   }
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')
+  @UseInterceptors(FilesInterceptor('files'))
   async update(
+    @UploadedFiles() files: FileDTO[],
     @Param('id') id: string,
     @Body() user: UserDTO,
-    @Headers() headers: any,
   ): Promise<IUser> {
-    console.log(headers);
     const updateUser = await new UserDTO(user).encryptPassword();
-    return await this.userService.update(id, updateUser);
+    return await this.userService.update(id, updateUser, files);
   }
 
   @Delete(':id')
