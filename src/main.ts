@@ -3,6 +3,8 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import 'reflect-metadata';
 import { ValidationPipe } from '@nestjs/common';
+import * as helmet from 'helmet';
+import * as csurf from 'csurf';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,6 +19,15 @@ async function bootstrap() {
   SwaggerModule.setup('/', app, document);
 
   app.useGlobalPipes(new ValidationPipe());
+
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,PUT,POST,DELETE',
+    optionsSuccessStatus: 200,
+  });
+
+  app.use(helmet());
+  //app.use(csurf());
 
   await app.listen(3000);
 }
