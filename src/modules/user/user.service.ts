@@ -32,7 +32,8 @@ export class UserService {
       where: { [key]: value },
     });
 
-    user.file = await this.fileRepository.findByKey('ownerId', user.id);
+    if (user)
+      user.file = await this.fileRepository.findByKey('ownerId', user.id);
 
     return user;
   }

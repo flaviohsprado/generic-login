@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { UserService } from 'src/modules/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import CryptographyService from 'src/services/criptography.service';
-import { IAuth } from 'src/interfaces/auth.interface';
+import { IAuth, IAuthCredentials } from 'src/interfaces/auth.interface';
+import { IUser } from 'src/modules/user/interfaces/user.interface';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +12,10 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(
+    username: string,
+    password: string,
+  ): Promise<Omit<IUser, 'password'>> {
     const user = await this.userService.findByKey('username', username);
 
     const decriptedPassword: string = await CryptographyService.decrypt(
@@ -26,13 +30,18 @@ export class AuthService {
     return null;
   }
 
-  async login(user: IAuth) {
-    const payload = {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      companyId: user.companyId,
-      companyName: user.companyName,
+  async login(user: IAuthCredentials) {
+    const userValidated: Omit<IUser, 'password'> = await this.validateUser(
+      user.username,
+      user.password,
+    );
+
+    const payload: IAuth = {
+      id: userValidated.id,
+      username: userValidated.username,
+      email: userValidated.email,
+      companyId: userValidated.companyId,
+      companyName: userValidated.companyName,
     };
 
     return {

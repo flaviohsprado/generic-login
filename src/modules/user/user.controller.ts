@@ -24,42 +24,50 @@ import { FileDTO } from '../file/dto/file.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async findAll(): Promise<IUser[]> {
     return await this.userService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findById(@Param('id') id: string): Promise<IUser> {
     return await this.userService.findByKey('id', id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/email/:email')
   async findByEmail(@Param('email') email: string): Promise<IUser> {
     return await this.userService.findByKey('email', email);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/name/:username')
   async findByUsername(@Param('username') username: string): Promise<IUser> {
     return await this.userService.findByKey('username', username);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/firstName/:firstName')
   async findByFirstName(@Param('firstName') firstName: string): Promise<IUser> {
     return await this.userService.findByKey('firstName', firstName);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/lastName/:lastName')
   async findByLastName(@Param('lastName') lastName: string): Promise<IUser> {
     return await this.userService.findByKey('lastName', lastName);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/birthDate/:birthDate')
   async findByBirthDate(@Param('birthDate') birthDate: string): Promise<IUser> {
     const dateOfBirth: string = getFormatedDateFromDate(new Date(birthDate));
     return await this.userService.findByKey('dateOfBirth', dateOfBirth);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/phoneNumber/:phoneNumber')
   async findByPhoneNumber(
     @Param('phoneNumber') phoneNumber: string,
@@ -67,16 +75,19 @@ export class UserController {
     return await this.userService.findByKey('phoneNumber', phoneNumber);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/address/:address')
   async findByAddress(@Param('address') address: string): Promise<IUser> {
     return await this.userService.findByKey('address', address);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/city/:city')
   async findByCity(@Param('city') city: string): Promise<IUser> {
     return await this.userService.findByKey('city', city);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/country/:country')
   async findByCountry(@Param('country') country: string): Promise<IUser> {
     return await this.userService.findByKey('country', country);
@@ -104,6 +115,7 @@ export class UserController {
     return await this.userService.update(id, updateUser, files);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
     await this.userService.destroy(id);
