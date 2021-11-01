@@ -1,4 +1,4 @@
-export declare class Company {
+export declare class CompanyDTO {
     id: string;
     name: string;
     email: string;
@@ -8,4 +8,5 @@ export declare class Company {
     colorPalette: string;
     createdAt?: Date;
     updatedAt?: Date;
+    constructor(props: Omit<CompanyDTO, 'id' | 'createdAt' | 'updatedAt'>, id?: string);
 }

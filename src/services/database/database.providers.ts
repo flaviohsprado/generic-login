@@ -25,7 +25,7 @@ export const databaseProviders = [
           migrationsDir: 'migrations',
         },
         synchronize: true,
-        ssl: true,
+        ssl: process.env.ENVIOREMENT === 'dev' ? false : true,
         extra: {
           ssl: {
             rejectUnauthorized: false,
