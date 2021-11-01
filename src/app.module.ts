@@ -5,9 +5,10 @@ import { DatabaseModule } from './services/database/database.module';
 import { FileMiddleware } from './middlewares/file.middleware';
 import { FileModule } from './modules/file/file.module';
 import { AuthMiddleware } from './middlewares/auth.middleware';
+import { CompanyModule } from './modules/company/company.module';
 
 @Module({
-  imports: [DatabaseModule, FileModule, UserModule, AuthModule],
+  imports: [DatabaseModule, FileModule, UserModule, AuthModule, CompanyModule],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
