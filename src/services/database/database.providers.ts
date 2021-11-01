@@ -6,6 +6,7 @@ require('dotenv').config();
 export const databaseProviders = [
   {
     provide: 'DATABASE_CONNECTION',
+
     useFactory: async () =>
       await createConnection({
         type: 'postgres',
@@ -24,6 +25,7 @@ export const databaseProviders = [
           migrationsDir: 'migrations',
         },
         synchronize: true,
+        ssl: true,
       }),
   },
 ];
