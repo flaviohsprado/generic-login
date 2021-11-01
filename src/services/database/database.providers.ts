@@ -26,6 +26,11 @@ export const databaseProviders = [
         },
         synchronize: true,
         ssl: true,
+        extra: {
+          ssl: {
+            rejectUnauthorized: false,
+          },
+        },
       }),
   },
 ];
