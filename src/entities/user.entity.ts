@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  OneToMany,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
+import { File } from './file.entity';
 
 @Entity()
 export class User {
@@ -49,4 +57,8 @@ export class User {
 
   @Column({ nullable: true })
   updatedAt: Date;
+
+  @OneToOne(() => File)
+  @JoinColumn()
+  file: File;
 }
