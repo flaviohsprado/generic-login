@@ -19,6 +19,8 @@ let AuthMiddleware = class AuthMiddleware {
         });
     }
     use(req, res, next) {
+        if (req.method === 'POST')
+            return next();
         if (!req.headers.authorization)
             throw new common_1.UnauthorizedException();
         const token = req.headers.authorization.split(' ')[1];

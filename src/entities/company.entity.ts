@@ -1,11 +1,30 @@
+import { Entity, Column, PrimaryColumn } from 'typeorm';
+
+@Entity()
 export class Company {
-  id: number;
+  @PrimaryColumn()
+  id: string;
+
+  @Column({ length: 250 })
   name: string;
+
+  @Column({ length: 250 })
   email: string;
+
+  @Column({ length: 250 })
   website: string;
+
   address?: string;
+
+  @Column()
   phone?: string;
-  logo?: string;
-  created_at?: Date;
-  updated_at?: Date;
+
+  @Column({ length: 250 })
+  colorPalette: string;
+
+  @Column({ nullable: true })
+  createdAt?: Date;
+
+  @Column({ nullable: true })
+  updatedAt?: Date;
 }

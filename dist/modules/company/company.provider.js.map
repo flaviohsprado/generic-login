@@ -1,1 +1,1 @@
-{"version":3,"file":"company.provider.js","sourceRoot":"","sources":["../../../src/modules/company/company.provider.ts"],"names":[],"mappings":""}
+{"version":3,"file":"company.provider.js","sourceRoot":"","sources":["../../../src/modules/company/company.provider.ts"],"names":[],"mappings":";;;AACA,kEAAwD;AAE3C,QAAA,gBAAgB,GAAG;IAC9B;QACE,OAAO,EAAE,oBAAoB;QAC7B,UAAU,EAAE,CAAC,UAAsB,EAAE,EAAE,CAAC,UAAU,CAAC,aAAa,CAAC,wBAAO,CAAC;QACzE,MAAM,EAAE,CAAC,qBAAqB,CAAC;KAChC;CACF,CAAC"}

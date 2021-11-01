@@ -24,6 +24,9 @@ export const databaseProviders = [
           migrationsDir: 'migrations',
         },
         synchronize: true,
+        extra: {
+          ssl: process.env.ENVIOREMENT === 'dev' ? false : true,
+        },
       }),
   },
 ];
