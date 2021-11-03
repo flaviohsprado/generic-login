@@ -39,11 +39,11 @@ __decorate([
 ], Company.prototype, "colorPalette", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
+    __metadata("design:type", Object)
 ], Company.prototype, "createdAt", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
+    __metadata("design:type", Object)
 ], Company.prototype, "updatedAt", void 0);
 Company = __decorate([
     (0, typeorm_1.Entity)()

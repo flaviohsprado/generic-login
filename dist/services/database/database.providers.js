@@ -24,9 +24,7 @@ exports.databaseProviders = [
                 migrationsDir: 'migrations',
             },
             synchronize: true,
-            extra: {
-                ssl: process.env.ENVIOREMENT === 'dev' ? false : true,
-            },
+            ssl: process.env.ENVIOREMENT === 'dev' ? false : true,
         }),
     },
 ];

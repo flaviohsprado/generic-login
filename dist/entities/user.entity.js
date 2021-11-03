@@ -72,11 +72,11 @@ __decorate([
 ], User.prototype, "companyName", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
+    __metadata("design:type", Object)
 ], User.prototype, "createdAt", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Date)
+    __metadata("design:type", Object)
 ], User.prototype, "updatedAt", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => file_entity_1.File),

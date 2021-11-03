@@ -1,7 +1,7 @@
 export declare const s3Config: {
-    bucketName: string;
-    defaultRegion: string;
-    defaultFilesACL: string;
-    accessKeyId: string;
-    secretAccessKey: string;
+    bucketName: any;
+    defaultRegion: any;
+    defaultFilesACL: any;
+    accessKeyId: any;
+    secretAccessKey: any;
 };

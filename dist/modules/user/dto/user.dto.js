@@ -107,13 +107,25 @@ __decorate([
     (0, swagger_1.ApiProperty)({
         required: false,
     }),
-    __metadata("design:type", Date)
+    __metadata("design:type", String)
+], UserDTO.prototype, "companyId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        required: true,
+    }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "companyName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        required: false,
+    }),
+    __metadata("design:type", Object)
 ], UserDTO.prototype, "createdAt", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         required: false,
     }),
-    __metadata("design:type", Date)
+    __metadata("design:type", Object)
 ], UserDTO.prototype, "updatedAt", void 0);
 exports.UserDTO = UserDTO;
 //# sourceMappingURL=user.dto.js.map

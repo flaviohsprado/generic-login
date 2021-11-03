@@ -69,6 +69,16 @@ export class UserDTO {
   @ApiProperty({
     required: false,
   })
+  companyId?: string;
+
+  @ApiProperty({
+    required: true,
+  })
+  companyName?: string;
+
+  @ApiProperty({
+    required: false,
+  })
   createdAt: Date;
 
   @ApiProperty({
