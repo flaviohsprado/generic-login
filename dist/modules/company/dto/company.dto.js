@@ -15,7 +15,6 @@ const class_validator_1 = require("class-validator");
 class CompanyDTO {
     constructor(props, id) {
         Object.assign(this, props);
-        console.log(id);
         if (!id) {
             this.id = (0, uuidv4_1.uuid)();
             this.createdAt = new Date();

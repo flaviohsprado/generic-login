@@ -7,11 +7,15 @@ import {
   Param,
   Delete,
   UseGuards,
-  Headers,
   UseInterceptors,
   UploadedFiles,
-  Req,
 } from '@nestjs/common';
+import {
+  GrpcMethod,
+  ClientGrpc,
+  Client,
+  Transport,
+} from '@nestjs/microservices';
 import { UserDTO } from './dto/user.dto';
 import { IUser } from './interfaces/user.interface';
 import { UserService } from './user.service';
@@ -32,6 +36,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
+  @GrpcMethod('UserService')
   async findById(@Param('id') id: string): Promise<IUser> {
     return await this.userService.findByKey('id', id);
   }

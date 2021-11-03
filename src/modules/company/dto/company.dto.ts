@@ -31,8 +31,6 @@ export class CompanyDTO {
   ) {
     Object.assign(this, props);
 
-    console.log(id);
-
     if (!id) {
       this.id = uuid();
       this.createdAt = new Date();
