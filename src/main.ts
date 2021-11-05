@@ -30,8 +30,10 @@ async function bootstrap() {
 
   app.use(helmet());
   //app.use(csurf());
+  //app.useGlobalFilters(new ExceptionFilter());
   app.connectMicroservice(grpcClientOptions);
 
   await app.startAllMicroservices();
+  await app.listen(port);
 }
 bootstrap();

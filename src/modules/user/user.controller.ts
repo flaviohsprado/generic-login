@@ -43,6 +43,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get('/email/:email')
+  @GrpcMethod('UserService')
   async findByEmail(@Param('email') email: string): Promise<IUser> {
     return await this.userService.findByKey('email', email);
   }
