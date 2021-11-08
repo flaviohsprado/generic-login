@@ -6,7 +6,7 @@ const path_1 = require("path");
 exports.grpcClientOptions = {
     transport: microservices_1.Transport.GRPC,
     options: {
-        url: 'localhost:3000',
+        url: 'localhost:3001',
         package: 'user',
         protoPath: (0, path_1.join)(__dirname, './user.proto'),
     },
