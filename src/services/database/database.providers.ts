@@ -26,11 +26,14 @@ export const databaseProviders = [
         },
         synchronize: true,
         ssl: process.env.ENVIOREMENT === 'dev' ? false : true,
-        extra: {
-          ssl: {
-            rejectUnauthorized: false,
-          },
-        },
+        extra:
+          process.env.ENVIOREMENT === 'prod'
+            ? {
+                ssl: {
+                  rejectUnauthorized: false,
+                },
+              }
+            : {},
       }),
   },
 ];

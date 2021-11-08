@@ -13,4 +13,5 @@ export declare class UserService {
     create(user: UserDTO, files: FileDTO[]): Promise<IUser>;
     update(id: string, user: UserDTO, files: FileDTO[]): Promise<IUser>;
     destroy(id: string): Promise<void>;
+    checkEmailAlreadyExists(email: string): Promise<boolean>;
 }

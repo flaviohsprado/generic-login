@@ -39,6 +39,9 @@ export class UserService {
   }
 
   async create(user: UserDTO, files: FileDTO[]): Promise<IUser> {
+    if (await this.checkEmailAlreadyExists(user.email))
+      throw new Error('Email already exists');
+
     const filesPaths = await FileUpload.upload(files, user.id, 'user');
 
     await this.fileRepository.create(filesPaths);
@@ -47,6 +50,9 @@ export class UserService {
   }
 
   async update(id: string, user: UserDTO, files: FileDTO[]): Promise<IUser> {
+    if (await this.checkEmailAlreadyExists(user.email))
+      throw new Error('Email already exists');
+
     const userAvatar: IFile = await this.fileRepository.findByKey(
       'ownerId',
       id,
@@ -78,5 +84,13 @@ export class UserService {
     await this.fileRepository.destroy([userAvatar]);
 
     await this.userRepository.delete(id);
+  }
+
+  async checkEmailAlreadyExists(email: string): Promise<boolean> {
+    const emailAlreadyExistis = await this.userRepository.findOne({
+      where: { email },
+    });
+
+    return !!emailAlreadyExistis;
   }
 }

@@ -40,11 +40,15 @@ let UserService = class UserService {
         return user;
     }
     async create(user, files) {
+        if (await this.checkEmailAlreadyExists(user.email))
+            throw new Error('Email already exists');
         const filesPaths = await file_1.default.upload(files, user.id, 'user');
         await this.fileRepository.create(filesPaths);
         return await this.userRepository.save(user);
     }
     async update(id, user, files) {
+        if (await this.checkEmailAlreadyExists(user.email))
+            throw new Error('Email already exists');
         const userAvatar = await this.fileRepository.findByKey('ownerId', id);
         if (files.length) {
             if (userAvatar) {
@@ -62,6 +66,12 @@ let UserService = class UserService {
         await file_1.default.delete([userAvatar.key]);
         await this.fileRepository.destroy([userAvatar]);
         await this.userRepository.delete(id);
+    }
+    async checkEmailAlreadyExists(email) {
+        const emailAlreadyExistis = await this.userRepository.findOne({
+            where: { email },
+        });
+        return !!emailAlreadyExistis;
     }
 };
 UserService = __decorate([

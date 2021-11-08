@@ -17,5 +17,5 @@ export interface IUser {
   companyName?: string;
   createdAt: Date;
   updatedAt: Date;
-  avatar?: File;
+  file?: File;
 }

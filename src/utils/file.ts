@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { IFile, IUploadedFile } from 'src/interfaces/file.interface';
 import { FileDTO } from 'src/modules/file/dto/file.dto';
 import { S3Service } from '../services/s3/s3.service';
 

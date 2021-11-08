@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package user;
+
+service UserService {
+  rpc FindById (UserById) returns (User) {}
+  rpc FindByCountry (UserByCountry) returns (User) {}
+  rpc FindByEmail (UserByCountry) returns (User) {}
+  rpc FindByUsername (UserByCountry) returns (User) {}
+  rpc FindByFirstName (UserByCountry) returns (User) {}
+  rpc FindByLastName (UserByCountry) returns (User) {}
+  rpc FindByBirthDate (UserByCountry) returns (User) {}
+  rpc FindByPhoneNumber (UserByCountry) returns (User) {}
+  rpc FindByAddress (UserByCountry) returns (User) {}
+  rpc FindByCity (UserByCountry) returns (User) {}
+  rpc create (UserCreateRequest) returns (User) {}
+  rpc Update (UserUpdateRequest) returns (User) {}
+}
+
+message UserCreateRequest {
+  File files = 1;
+  User user = 2;
+}
+
+message UserUpdateRequest {
+  File files = 1;
+  string id = 2;
+  User user = 3;  
+}
+
+message UserById {
+  string id = 1;
+}
+
+message UserByCountry {
+  string country = 1;
+}
+
+message UserByEmail {
+  string email = 1;
+}
+
+message UserByUsername {
+  string username = 1;
+}
+
+message UserByFirstName {
+  string firstName = 1;
+}
+
+message UserByLastName {
+  string lastName = 1;
+}
+
+message UserByBirthDate {
+  string birthDate = 1;
+}
+
+message UserByPhoneNumber {
+  string phoneNumber = 1;
+}
+
+message UserByAddress {
+  string address = 1;
+}
+
+message UserByCity {
+  string city = 1;
+}
+
+message User {
+  string id = 1;
+  string username = 2;
+  string password = 3;
+  string email = 4;
+  string firstName = 5;
+  string lastName = 6;
+  string dateOfBirth = 7;
+  string phoneNumber = 8;
+  string address = 9;
+  string city = 10;
+  string country = 11;
+  string token = 12;
+  string companyId = 13;
+  string companyName = 14;
+  string createdAt = 15;
+  string updatedAt = 16;
+  File file = 17;
+}
+
+message File {
+  string id = 1;
+  string ownerId = 2;
+  string ownerType = 3;
+  string key = 4;
+  string url = 5;
+}
