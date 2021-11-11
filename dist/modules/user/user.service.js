@@ -19,6 +19,7 @@ const user_entity_1 = require("../../entities/user.entity");
 const file_1 = require("../../utils/file");
 const file_service_1 = require("../file/file.service");
 const file_interface_1 = require("../../interfaces/file.interface");
+const teste_1 = require("./teste");
 let UserService = class UserService {
     constructor(userRepository, fileRepository) {
         this.userRepository = userRepository;
@@ -29,6 +30,7 @@ let UserService = class UserService {
         for (const user of users) {
             user.file = await this.fileRepository.findByKey('ownerId', user.id);
         }
+        teste_1.default.alterName();
         return users;
     }
     async findByKey(key, value) {

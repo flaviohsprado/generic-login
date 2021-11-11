@@ -26,6 +26,7 @@ async function bootstrap() {
     });
     app.use(helmet());
     app.connectMicroservice(grpc_user_options_1.grpcClientOptions);
+    await app.startAllMicroservices();
     await app.listen(port);
 }
 bootstrap();

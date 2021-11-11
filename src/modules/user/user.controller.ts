@@ -117,7 +117,7 @@ export class UserController {
     @Param('id') id: string,
     @Body() user: UserDTO,
   ): Promise<IUser> {
-    const updateUser = await new UserDTO(user).encryptPassword();
+    const updateUser = await new UserDTO(user, id).encryptPassword();
     return await this.userService.update(id, updateUser, files);
   }
 
