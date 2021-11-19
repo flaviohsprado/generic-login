@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.grpcClientOptions = void 0;
+exports.grpcUserOptions = void 0;
 const microservices_1 = require("@nestjs/microservices");
 const path_1 = require("path");
-exports.grpcClientOptions = {
+exports.grpcUserOptions = {
     transport: microservices_1.Transport.GRPC,
     options: {
         url: 'localhost:3001',

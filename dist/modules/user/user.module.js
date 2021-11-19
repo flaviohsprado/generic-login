@@ -11,7 +11,7 @@ const common_1 = require("@nestjs/common");
 const user_controller_1 = require("./user.controller");
 const user_service_1 = require("./user.service");
 const user_provider_1 = require("./user.provider");
-const database_module_1 = require("../../services/database/database.module");
+const database_module_1 = require("../database/database.module");
 const file_module_1 = require("../file/file.module");
 let UserModule = class UserModule {
 };

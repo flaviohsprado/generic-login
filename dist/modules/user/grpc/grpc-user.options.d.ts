@@ -1,2 +1,2 @@
 import { ClientOptions } from '@nestjs/microservices';
-export declare const grpcClientOptions: ClientOptions;
+export declare const grpcUserOptions: ClientOptions;

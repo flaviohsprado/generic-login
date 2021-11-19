@@ -1,7 +1,7 @@
 import { Transport, ClientOptions } from '@nestjs/microservices';
 import { join } from 'path';
 
-export const grpcClientOptions: ClientOptions = {
+export const grpcUserOptions: ClientOptions = {
   transport: Transport.GRPC,
   options: {
     url: 'localhost:3001',
