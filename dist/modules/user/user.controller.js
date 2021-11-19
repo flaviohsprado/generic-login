@@ -63,7 +63,7 @@ let UserController = class UserController {
         return this.userService.create(user, files);
     }
     async update(files, id, user) {
-        const updateUser = await new user_dto_1.UserDTO(user).encryptPassword();
+        const updateUser = await new user_dto_1.UserDTO(user, id).encryptPassword();
         return await this.userService.update(id, updateUser, files);
     }
     async delete(id) {

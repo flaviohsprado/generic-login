@@ -25,7 +25,8 @@ async function bootstrap() {
         optionsSuccessStatus: 200,
     });
     app.use(helmet());
-    app.connectMicroservice(grpc_user_options_1.grpcClientOptions);
+    app.connectMicroservice(grpc_user_options_1.grpcUserOptions);
+    await app.startAllMicroservices();
     await app.listen(port);
 }
 bootstrap();

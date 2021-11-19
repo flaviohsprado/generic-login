@@ -8,9 +8,14 @@ import { FileDTO } from '../file/dto/file.dto';
 //import { File } from 'src/entities/file.entity';
 import { FileService } from '../file/file.service';
 import { IFile } from 'src/interfaces/file.interface';
+import { Observable } from 'rxjs';
+import { AxiosResponse } from 'axios';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class UserService {
+  private httpService: HttpService;
+
   constructor(
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,

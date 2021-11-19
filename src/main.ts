@@ -5,7 +5,7 @@ import 'reflect-metadata';
 import { ValidationPipe } from '@nestjs/common';
 import * as helmet from 'helmet';
 import * as csurf from 'csurf';
-import { grpcClientOptions } from './modules/user/grpc/grpc-user.options';
+import { grpcUserOptions } from './modules/user/grpc/grpc-user.options';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -31,7 +31,7 @@ async function bootstrap() {
   app.use(helmet());
   //app.use(csurf());
   //app.useGlobalFilters(new ExceptionFilter());
-  app.connectMicroservice(grpcClientOptions);
+  app.connectMicroservice(grpcUserOptions);
 
   await app.startAllMicroservices();
   await app.listen(port);

@@ -7,6 +7,7 @@ import { FileService } from '../file/file.service';
 export declare class UserService {
     private userRepository;
     private fileRepository;
+    private httpService;
     constructor(userRepository: Repository<User>, fileRepository: FileService);
     findAll(): Promise<IUser[]>;
     findByKey(key: string, value: string): Promise<IUser>;
