@@ -25,9 +25,13 @@ export class UserService {
 
   async findAll(): Promise<IUser[]> {
     const users = await this.userRepository.find();
+    //const users = new UserDTO(await this.userRepository.find());
 
     for (const user of users) {
-      user.file = await this.fileRepository.findByKey('ownerId', user.id);
+      let userAux = new UserDTO({ ...user }).hideSensitiveData();
+      userAux.file = await this.fileRepository.findByKey('ownerId', user.id);
+
+      Object.assign(user, userAux);
     }
 
     return users;
@@ -38,8 +42,12 @@ export class UserService {
       where: { [key]: value },
     });
 
+    let userAux = new UserDTO({ ...user }).encodeSensitiveData();
+
     if (user)
-      user.file = await this.fileRepository.findByKey('ownerId', user.id);
+      userAux.file = await this.fileRepository.findByKey('ownerId', user.id);
+
+    Object.assign(user, userAux);
 
     return user;
   }

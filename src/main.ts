@@ -6,7 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 import * as helmet from 'helmet';
 import * as csurf from 'csurf';
 import { grpcUserOptions } from './modules/user/grpc/grpc-user.options';
-import { AllExceptionsFilter } from './utils/exceptionFilter.utils';
+import { AllExceptionsFilter } from './filters/exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

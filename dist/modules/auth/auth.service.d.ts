@@ -6,7 +6,7 @@ export declare class AuthService {
     private userService;
     private jwtService;
     constructor(userService: UserService, jwtService: JwtService);
-    validateUser(username: string, password: string): Promise<Omit<IUser, 'password'>>;
+    validateUser(email: string, password: string): Promise<Omit<IUser, 'password'>>;
     login(user: IAuthCredentials): Promise<{
         accessToken: string;
     }>;
