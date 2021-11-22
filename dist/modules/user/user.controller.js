@@ -17,9 +17,10 @@ const common_1 = require("@nestjs/common");
 const microservices_1 = require("@nestjs/microservices");
 const user_dto_1 = require("./dto/user.dto");
 const user_service_1 = require("./user.service");
-const date_1 = require("../../utils/date");
+const date_utils_1 = require("../../utils/date.utils");
 const jwt_auth_guard_1 = require("../../services/jwt/jwt-auth.guard");
 const platform_express_1 = require("@nestjs/platform-express");
+const errorHandler_interceptor_1 = require("../../interceptors/errorHandler.interceptor");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -43,7 +44,7 @@ let UserController = class UserController {
         return await this.userService.findByKey('lastName', lastName);
     }
     async findByBirthDate(birthDate) {
-        const dateOfBirth = (0, date_1.getFormatedDateFromDate)(new Date(birthDate));
+        const dateOfBirth = (0, date_utils_1.getFormatedDateFromDate)(new Date(birthDate));
         return await this.userService.findByKey('dateOfBirth', dateOfBirth);
     }
     async findByPhoneNumber(phoneNumber) {
@@ -189,6 +190,7 @@ __decorate([
 ], UserController.prototype, "delete", null);
 UserController = __decorate([
     (0, common_1.Controller)('private/users'),
+    (0, common_1.UseInterceptors)(errorHandler_interceptor_1.ErrorHandlerInterceptor),
     __metadata("design:paramtypes", [user_service_1.UserService])
 ], UserController);
 exports.UserController = UserController;
