@@ -6,6 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 import * as helmet from 'helmet';
 import * as csurf from 'csurf';
 import { grpcUserOptions } from './modules/user/grpc/grpc-user.options';
+import { AllExceptionsFilter } from './utils/exceptionFilter.utils';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,7 +31,7 @@ async function bootstrap() {
 
   app.use(helmet());
   //app.use(csurf());
-  //app.useGlobalFilters(new ExceptionFilter());
+  app.useGlobalFilters(new AllExceptionsFilter());
   app.connectMicroservice(grpcUserOptions);
 
   await app.startAllMicroservices();

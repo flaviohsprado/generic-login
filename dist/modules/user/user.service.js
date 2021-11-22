@@ -16,9 +16,10 @@ exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("typeorm");
 const user_entity_1 = require("../../entities/user.entity");
-const file_1 = require("../../utils/file");
+const file_utils_1 = require("../../utils/file.utils");
 const file_service_1 = require("../file/file.service");
 const file_interface_1 = require("../../interfaces/file.interface");
+const error_utils_1 = require("../../utils/error.utils");
 let UserService = class UserService {
     constructor(userRepository, fileRepository) {
         this.userRepository = userRepository;
@@ -41,8 +42,8 @@ let UserService = class UserService {
     }
     async create(user, files) {
         if (await this.checkEmailAlreadyExists(user.email))
-            throw new Error('Email already exists');
-        const filesPaths = await file_1.default.upload(files, user.id, 'user');
+            throw new error_utils_1.default(202, 'Email already exists');
+        const filesPaths = await file_utils_1.default.upload(files, user.id, 'user');
         await this.fileRepository.create(filesPaths);
         return await this.userRepository.save(user);
     }
@@ -52,10 +53,10 @@ let UserService = class UserService {
         const userAvatar = await this.fileRepository.findByKey('ownerId', id);
         if (files.length) {
             if (userAvatar) {
-                await file_1.default.delete([userAvatar.key]);
+                await file_utils_1.default.delete([userAvatar.key]);
                 await this.fileRepository.destroy([userAvatar]);
             }
-            const filesPaths = await file_1.default.upload(files, id, 'user');
+            const filesPaths = await file_utils_1.default.upload(files, id, 'user');
             await this.fileRepository.create(filesPaths);
         }
         await this.userRepository.save(Object.assign(Object.assign({}, user), { id }));
@@ -63,7 +64,7 @@ let UserService = class UserService {
     }
     async destroy(id) {
         const userAvatar = await this.fileRepository.findByKey('ownerId', id);
-        await file_1.default.delete([userAvatar.key]);
+        await file_utils_1.default.delete([userAvatar.key]);
         await this.fileRepository.destroy([userAvatar]);
         await this.userRepository.delete(id);
     }

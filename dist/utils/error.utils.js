@@ -8,4 +8,4 @@ class StandardError extends Error {
     }
 }
 exports.default = StandardError;
-//# sourceMappingURL=error.js.map
+//# sourceMappingURL=error.utils.js.map

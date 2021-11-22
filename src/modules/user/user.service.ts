@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { User } from 'src/entities/user.entity';
 import { UserDTO } from './dto/user.dto';
 import { IUser } from './interfaces/user.interface';
-import FileUpload from '../../utils/file';
+import FileUpload from '../../utils/file.utils';
 import { FileDTO } from '../file/dto/file.dto';
 //import { File } from 'src/entities/file.entity';
 import { FileService } from '../file/file.service';
@@ -11,6 +11,7 @@ import { IFile } from 'src/interfaces/file.interface';
 import { Observable } from 'rxjs';
 import { AxiosResponse } from 'axios';
 import { HttpService } from '@nestjs/axios';
+import StandardError from 'src/utils/error.utils';
 
 @Injectable()
 export class UserService {
@@ -45,7 +46,7 @@ export class UserService {
 
   async create(user: UserDTO, files: FileDTO[]): Promise<IUser> {
     if (await this.checkEmailAlreadyExists(user.email))
-      throw new Error('Email already exists');
+      throw new StandardError(202, 'Email already exists');
 
     const filesPaths = await FileUpload.upload(files, user.id, 'user');
 

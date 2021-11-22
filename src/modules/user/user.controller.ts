@@ -19,12 +19,14 @@ import {
 import { UserDTO } from './dto/user.dto';
 import { IUser } from './interfaces/user.interface';
 import { UserService } from './user.service';
-import { getFormatedDateFromDate } from 'src/utils/date';
+import { getFormatedDateFromDate } from 'src/utils/date.utils';
 import { JwtAuthGuard } from 'src/services/jwt/jwt-auth.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { FileDTO } from '../file/dto/file.dto';
+import { ErrorHandlerInterceptor } from 'src/interceptors/errorHandler.interceptor';
 
 @Controller('private/users')
+@UseInterceptors(ErrorHandlerInterceptor)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
