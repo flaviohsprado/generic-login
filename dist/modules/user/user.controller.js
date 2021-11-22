@@ -20,7 +20,6 @@ const user_service_1 = require("./user.service");
 const date_utils_1 = require("../../utils/date.utils");
 const jwt_auth_guard_1 = require("../../services/jwt/jwt-auth.guard");
 const platform_express_1 = require("@nestjs/platform-express");
-const errorHandler_interceptor_1 = require("../../interceptors/errorHandler.interceptor");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
@@ -190,7 +189,6 @@ __decorate([
 ], UserController.prototype, "delete", null);
 UserController = __decorate([
     (0, common_1.Controller)('private/users'),
-    (0, common_1.UseInterceptors)(errorHandler_interceptor_1.ErrorHandlerInterceptor),
     __metadata("design:paramtypes", [user_service_1.UserService])
 ], UserController);
 exports.UserController = UserController;

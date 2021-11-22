@@ -16,6 +16,7 @@ exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("typeorm");
 const user_entity_1 = require("../../entities/user.entity");
+const user_dto_1 = require("./dto/user.dto");
 const file_utils_1 = require("../../utils/file.utils");
 const file_service_1 = require("../file/file.service");
 const file_interface_1 = require("../../interfaces/file.interface");
@@ -28,7 +29,9 @@ let UserService = class UserService {
     async findAll() {
         const users = await this.userRepository.find();
         for (const user of users) {
-            user.file = await this.fileRepository.findByKey('ownerId', user.id);
+            let userAux = new user_dto_1.UserDTO(Object.assign({}, user)).hideSensitiveData();
+            userAux.file = await this.fileRepository.findByKey('ownerId', user.id);
+            Object.assign(user, userAux);
         }
         return users;
     }
@@ -36,8 +39,10 @@ let UserService = class UserService {
         const user = await this.userRepository.findOne({
             where: { [key]: value },
         });
+        let userAux = new user_dto_1.UserDTO(Object.assign({}, user)).encodeSensitiveData();
         if (user)
-            user.file = await this.fileRepository.findByKey('ownerId', user.id);
+            userAux.file = await this.fileRepository.findByKey('ownerId', user.id);
+        Object.assign(user, userAux);
         return user;
     }
     async create(user, files) {

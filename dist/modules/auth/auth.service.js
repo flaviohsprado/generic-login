@@ -32,8 +32,8 @@ let AuthService = class AuthService {
         this.userService = userService;
         this.jwtService = jwtService;
     }
-    async validateUser(username, password) {
-        const user = await this.userService.findByKey('username', username);
+    async validateUser(email, password) {
+        const user = await this.userService.findByKey('email', email);
         const decriptedPassword = await criptography_service_1.default.decrypt(password);
         if (user && user.password === decriptedPassword) {
             const { password } = user, result = __rest(user, ["password"]);
@@ -42,7 +42,7 @@ let AuthService = class AuthService {
         return null;
     }
     async login(user) {
-        const userValidated = await this.validateUser(user.username, user.password);
+        const userValidated = await this.validateUser(user.email, user.password);
         const payload = {
             id: userValidated.id,
             username: userValidated.username,
