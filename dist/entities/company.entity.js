@@ -22,19 +22,23 @@ __decorate([
     __metadata("design:type", String)
 ], Company.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ length: 250 }),
+    (0, typeorm_1.Column)({ length: 250, nullable: true }),
     __metadata("design:type", String)
 ], Company.prototype, "email", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ length: 250 }),
+    (0, typeorm_1.Column)({ length: 250, nullable: true }),
     __metadata("design:type", String)
 ], Company.prototype, "website", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], Company.prototype, "address", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Company.prototype, "phone", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ length: 250 }),
+    (0, typeorm_1.Column)({ length: 250, nullable: true }),
     __metadata("design:type", String)
 ], Company.prototype, "colorPalette", void 0);
 __decorate([

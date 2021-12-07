@@ -19,8 +19,8 @@ import {
 import { UserDTO } from './dto/user.dto';
 import { IUser } from './interfaces/user.interface';
 import { UserService } from './user.service';
-import { getFormatedDateFromDate } from 'src/utils/date.utils';
-import { JwtAuthGuard } from 'src/services/jwt/jwt-auth.guard';
+import { getFormatedDateFromDate } from '../../utils/date.utils';
+import { JwtAuthGuard } from '../../services/jwt/jwt-auth.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { FileDTO } from '../file/dto/file.dto';
 

@@ -1,4 +1,4 @@
-import { FileDTO } from 'src/modules/file/dto/file.dto';
+import { FileDTO } from '../../modules/file/dto/file.dto';
 export declare class S3Service {
     private client;
     private readonly bucketName;

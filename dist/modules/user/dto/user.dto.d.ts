@@ -12,6 +12,8 @@ export declare class UserDTO {
     city?: string;
     country?: string;
     token?: string;
+    companyId?: string;
+    companyName?: string;
     createdAt: Date;
     updatedAt: Date;
     file: File;

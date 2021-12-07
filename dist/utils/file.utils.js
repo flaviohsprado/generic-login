@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
-const file_dto_1 = require("../modules/file/dto/file.dto");
 const s3_service_1 = require("../services/s3/s3.service");
 let FileUpload = class FileUpload {
     constructor() {

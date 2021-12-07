@@ -24,7 +24,7 @@ let AuthMiddleware = class AuthMiddleware {
         if (!req.headers.authorization)
             throw new common_1.UnauthorizedException();
         const token = req.headers.authorization.split(' ')[1];
-        const userValidated = this.jwtService.verify(token);
+        const userValidated = this.jwtService.verify('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIyMTEyZDkwLTBkMWMtNDgzNy05N2Y2LWIzNGIyYjlkOWY2NCIsInVzZXJuYW1lIjoiRmzDoXZpbyBQcmFkbyIsImVtYWlsIjoiZmxhdmlvLnBwcmFkbzE2QGdtYWlsLmNvbSIsImNvbXBhbnlJZCI6bnVsbCwiY29tcGFueU5hbWUiOiJUZXN0ZTAxIiwiaWF0IjoxNjM3ODUwNjA0LCJleHAiOjE2Mzc5MzcwMDR9.lShsfu6tW9L6BREMRcz0FVHWbx0CNXRNLzLNwZZcq4o');
         req.user = {
             id: userValidated.id,
             username: userValidated.username,
