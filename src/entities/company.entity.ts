@@ -8,18 +8,19 @@ export class Company {
   @Column({ length: 250 })
   name: string;
 
-  @Column({ length: 250 })
+  @Column({ length: 250, nullable: true })
   email: string;
 
-  @Column({ length: 250 })
+  @Column({ length: 250, nullable: true })
   website: string;
 
+  @Column({ nullable: true })
   address?: string;
 
-  @Column()
+  @Column({ nullable: true })
   phone?: string;
 
-  @Column({ length: 250 })
+  @Column({ length: 250, nullable: true })
   colorPalette: string;
 
   @Column({ nullable: true })

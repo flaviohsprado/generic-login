@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FileDTO } from 'src/modules/file/dto/file.dto';
+import { FileDTO } from '../modules/file/dto/file.dto';
 import { S3Service } from '../services/s3/s3.service';
 
 @Injectable()

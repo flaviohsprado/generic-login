@@ -130,6 +130,16 @@ __decorate([
     (0, swagger_1.ApiProperty)({
         required: false,
     }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "companyId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], UserDTO.prototype, "companyName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        required: false,
+    }),
     __metadata("design:type", Date)
 ], UserDTO.prototype, "createdAt", void 0);
 __decorate([

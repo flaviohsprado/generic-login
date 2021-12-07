@@ -11,19 +11,19 @@ export class CompanyService {
     private companyRepository: Repository<Company>,
   ) {}
 
-  async findAll(): Promise<ICompany[]> {
+  public async findAll(): Promise<ICompany[]> {
     return await this.companyRepository.find();
   }
 
-  async create(company: CompanyDTO): Promise<ICompany> {
+  public async create(company: CompanyDTO): Promise<ICompany> {
     return await this.companyRepository.save(company);
   }
 
-  async update(id: string, company: CompanyDTO): Promise<ICompany> {
+  public async update(id: string, company: CompanyDTO): Promise<ICompany> {
     return await this.companyRepository.save({ ...company, id });
   }
 
-  async destroy(id: string): Promise<void> {
+  public async destroy(id: string): Promise<void> {
     await this.companyRepository.delete(id);
   }
 }

@@ -16,7 +16,7 @@ export class AuthService {
     email: string,
     password: string,
   ): Promise<Omit<IUser, 'password'>> {
-    const user = await this.userService.findByKey('email', email);
+    const user = await this.userService.findByKey('email', email, false);
 
     const decriptedPassword: string = await CryptographyService.decrypt(
       password,

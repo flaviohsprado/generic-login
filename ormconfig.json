@@ -1,0 +1,15 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "postgres",
+  "password": "postdba",
+  "database": "GenericLogin",
+  "entities": ["src/entities/**", "./dist/entities/*.js"],
+  "migrations": ["src/migrations/**", "./dist/migration/*.js"],
+  "cli": {
+    "migrationsDir": "migrations"
+  },
+  "synchronize": true,
+  "ssl": false
+}

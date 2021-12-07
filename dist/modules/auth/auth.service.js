@@ -33,7 +33,7 @@ let AuthService = class AuthService {
         this.jwtService = jwtService;
     }
     async validateUser(email, password) {
-        const user = await this.userService.findByKey('email', email);
+        const user = await this.userService.findByKey('email', email, false);
         const decriptedPassword = await criptography_service_1.default.decrypt(password);
         if (user && user.password === decriptedPassword) {
             const { password } = user, result = __rest(user, ["password"]);

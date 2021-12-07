@@ -1,6 +1,6 @@
 import { uuid } from 'uuidv4';
 import { ApiProperty } from '@nestjs/swagger';
-import Cryptography from 'src/services/criptography.service';
+import CryptographyService from '../../../services/criptography.service';
 import { IsEmail, IsMobilePhone, IsNotEmpty } from 'class-validator';
 import { File } from 'src/entities/file.entity';
 
@@ -70,6 +70,14 @@ export class UserDTO {
   @ApiProperty({
     required: false,
   })
+  companyId?: string;
+
+  @ApiProperty()
+  companyName?: string;
+
+  @ApiProperty({
+    required: false,
+  })
   createdAt: Date;
 
   @ApiProperty({
@@ -96,7 +104,7 @@ export class UserDTO {
   }
 
   public async encryptPassword(): Promise<UserDTO> {
-    this.password = await Cryptography.encrypt(this.password);
+    this.password = await CryptographyService.encrypt(this.password);
     return this;
   }
 
