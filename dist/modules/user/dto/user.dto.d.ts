@@ -21,4 +21,5 @@ export declare class UserDTO {
     encryptPassword(): Promise<UserDTO>;
     hideSensitiveData(): UserDTO;
     encodeSensitiveData(): UserDTO;
+    private formatPhoneNumber;
 }

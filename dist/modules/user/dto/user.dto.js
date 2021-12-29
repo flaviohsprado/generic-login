@@ -45,10 +45,15 @@ class UserDTO {
         this.updatedAt = null;
         this.dateOfBirth = null;
         this.phoneNumber =
-            this.phoneNumber.substring(0, 3) +
-                '******' +
-                this.phoneNumber.substring(9);
+            this.phoneNumber === undefined
+                ? ''
+                : this.formatPhoneNumber(this.phoneNumber);
         return this;
+    }
+    formatPhoneNumber(phoneNumber) {
+        phoneNumber =
+            phoneNumber.substring(0, 3) + '******' + phoneNumber.substring(9);
+        return phoneNumber;
     }
 }
 __decorate([

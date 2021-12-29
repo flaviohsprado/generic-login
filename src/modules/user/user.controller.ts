@@ -9,6 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFiles,
+  Req,
 } from '@nestjs/common';
 import {
   GrpcMethod,
@@ -23,10 +24,18 @@ import { getFormatedDateFromDate } from '../../utils/date.utils';
 import { JwtAuthGuard } from '../../services/jwt/jwt-auth.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { FileDTO } from '../file/dto/file.dto';
+import { IAuth } from 'src/interfaces/auth.interface';
+import { IAuthRequest } from 'src/interfaces/authRequest.interface';
 
 @Controller('private/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/user')
+  async findOne(@Req() request: IAuthRequest): Promise<IUser> {
+    return await this.userService.findOne(request.user.id);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Get()

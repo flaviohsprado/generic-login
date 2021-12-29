@@ -12,6 +12,7 @@ export declare class UserService {
     private emailUtils;
     private databaseUtils;
     constructor(userRepository: Repository<User>, fileRepository: FileService, companyService: CompanyService);
+    findOne(id: string): Promise<IUser>;
     findAll(): Promise<IUser[]>;
     findByKey(key: string, value: string, encodeSensitiveData?: boolean): Promise<IUser>;
     create(user: UserDTO, files: FileDTO[]): Promise<IUser>;

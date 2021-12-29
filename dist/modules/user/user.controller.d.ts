@@ -2,9 +2,11 @@ import { UserDTO } from './dto/user.dto';
 import { IUser } from './interfaces/user.interface';
 import { UserService } from './user.service';
 import { FileDTO } from '../file/dto/file.dto';
+import { IAuthRequest } from 'src/interfaces/authRequest.interface';
 export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
+    findOne(request: IAuthRequest): Promise<IUser>;
     findAll(): Promise<IUser[]>;
     findById(id: string): Promise<IUser>;
     findByEmail(email: string): Promise<IUser>;

@@ -30,10 +30,19 @@ let UserService = class UserService {
         this.emailUtils = new email_utils_1.EmailUtils(this.userRepository);
         this.databaseUtils = new database_utils_1.DatabaseUtils(this.companyService);
     }
+    async findOne(id) {
+        const user = await this.userRepository.findOne({
+            where: { id },
+        });
+        let userAux = new user_dto_1.UserDTO(Object.assign({}, user), user.id);
+        userAux.file = await this.fileRepository.findByKey('ownerId', id);
+        Object.assign(user, userAux);
+        return user;
+    }
     async findAll() {
         const users = await this.userRepository.find();
         for (const user of users) {
-            let userAux = new user_dto_1.UserDTO(Object.assign({}, user)).hideSensitiveData();
+            let userAux = new user_dto_1.UserDTO(Object.assign({}, user), user.id).hideSensitiveData();
             userAux.file = await this.fileRepository.findByKey('ownerId', user.id);
             Object.assign(user, userAux);
         }
@@ -45,10 +54,10 @@ let UserService = class UserService {
         });
         let userAux;
         if (encodeSensitiveData) {
-            userAux = new user_dto_1.UserDTO(Object.assign({}, user)).encodeSensitiveData();
+            userAux = new user_dto_1.UserDTO(Object.assign({}, user), user.id).encodeSensitiveData();
         }
         else {
-            userAux = new user_dto_1.UserDTO(Object.assign({}, user));
+            userAux = new user_dto_1.UserDTO(Object.assign({}, user), user.id);
         }
         if (user)
             userAux.file = await this.fileRepository.findByKey('ownerId', user.id);
@@ -58,7 +67,6 @@ let UserService = class UserService {
     async create(user, files) {
         if (await this.emailUtils.checkEmailAlreadyExists(user.email))
             throw new error_utils_1.default(202, 'Email already exists');
-        this.databaseUtils.checkIfCreateNewDatabase(user.companyName);
         const filesPaths = await file_utils_1.default.upload(files, user.id, 'user');
         await this.fileRepository.create(filesPaths);
         return await this.userRepository.save(user);
