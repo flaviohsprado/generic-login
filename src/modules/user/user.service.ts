@@ -27,11 +27,25 @@ export class UserService {
     this.databaseUtils = new DatabaseUtils(this.companyService);
   }
 
+  public async findOne(id: string): Promise<IUser> {
+    const user = await this.userRepository.findOne({
+      where: { id },
+    });
+
+    let userAux = new UserDTO({ ...user }, user.id);
+
+    userAux.file = await this.fileRepository.findByKey('ownerId', id);
+
+    Object.assign(user, userAux);
+
+    return user;
+  }
+
   public async findAll(): Promise<IUser[]> {
     const users = await this.userRepository.find();
 
     for (const user of users) {
-      let userAux = new UserDTO({ ...user }).hideSensitiveData();
+      let userAux = new UserDTO({ ...user }, user.id).hideSensitiveData();
       userAux.file = await this.fileRepository.findByKey('ownerId', user.id);
 
       Object.assign(user, userAux);
@@ -52,9 +66,9 @@ export class UserService {
     let userAux;
 
     if (encodeSensitiveData) {
-      userAux = new UserDTO({ ...user }).encodeSensitiveData();
+      userAux = new UserDTO({ ...user }, user.id).encodeSensitiveData();
     } else {
-      userAux = new UserDTO({ ...user });
+      userAux = new UserDTO({ ...user }, user.id);
     }
 
     if (user)
@@ -69,7 +83,7 @@ export class UserService {
     if (await this.emailUtils.checkEmailAlreadyExists(user.email))
       throw new StandardError(202, 'Email already exists');
 
-    this.databaseUtils.checkIfCreateNewDatabase(user.companyName);
+    //this.databaseUtils.checkIfCreateNewDatabase(user.companyName);
 
     const filesPaths = await FileUpload.upload(files, user.id, 'user');
 

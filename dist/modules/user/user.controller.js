@@ -20,9 +20,14 @@ const user_service_1 = require("./user.service");
 const date_utils_1 = require("../../utils/date.utils");
 const jwt_auth_guard_1 = require("../../services/jwt/jwt-auth.guard");
 const platform_express_1 = require("@nestjs/platform-express");
+const auth_interface_1 = require("../../interfaces/auth.interface");
+const authRequest_interface_1 = require("../../interfaces/authRequest.interface");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
+    }
+    async findOne(request) {
+        return await this.userService.findOne(request.user.id);
     }
     async findAll() {
         return await this.userService.findAll();
@@ -70,6 +75,14 @@ let UserController = class UserController {
         await this.userService.destroy(id);
     }
 };
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)('/user'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "findOne", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)(),
