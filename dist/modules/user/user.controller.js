@@ -14,14 +14,20 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
+const microservices_1 = require("@nestjs/microservices");
 const user_dto_1 = require("./dto/user.dto");
 const user_service_1 = require("./user.service");
-const date_1 = require("../../utils/date");
+const date_utils_1 = require("../../utils/date.utils");
 const jwt_auth_guard_1 = require("../../services/jwt/jwt-auth.guard");
 const platform_express_1 = require("@nestjs/platform-express");
+const auth_interface_1 = require("../../interfaces/auth.interface");
+const authRequest_interface_1 = require("../../interfaces/authRequest.interface");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
+    }
+    async findOne(request) {
+        return await this.userService.findOne(request.user.id);
     }
     async findAll() {
         return await this.userService.findAll();
@@ -42,7 +48,7 @@ let UserController = class UserController {
         return await this.userService.findByKey('lastName', lastName);
     }
     async findByBirthDate(birthDate) {
-        const dateOfBirth = (0, date_1.getFormatedDateFromDate)(new Date(birthDate));
+        const dateOfBirth = (0, date_utils_1.getFormatedDateFromDate)(new Date(birthDate));
         return await this.userService.findByKey('dateOfBirth', dateOfBirth);
     }
     async findByPhoneNumber(phoneNumber) {
@@ -62,13 +68,21 @@ let UserController = class UserController {
         return this.userService.create(user, files);
     }
     async update(files, id, user) {
-        const updateUser = await new user_dto_1.UserDTO(user).encryptPassword();
+        const updateUser = await new user_dto_1.UserDTO(user, id).encryptPassword();
         return await this.userService.update(id, updateUser, files);
     }
     async delete(id) {
         await this.userService.destroy(id);
     }
 };
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)('/user'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "findOne", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)(),
@@ -79,6 +93,7 @@ __decorate([
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)(':id'),
+    (0, microservices_1.GrpcMethod)('UserService'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -87,6 +102,7 @@ __decorate([
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)('/email/:email'),
+    (0, microservices_1.GrpcMethod)('UserService'),
     __param(0, (0, common_1.Param)('email')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileMiddleware = void 0;
 const common_1 = require("@nestjs/common");
-const file_interface_1 = require("../interfaces/file.interface");
 let FileMiddleware = class FileMiddleware {
     use(req, res, next) {
         const { files } = req;

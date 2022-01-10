@@ -1,44 +1,90 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { User } from 'src/entities/user.entity';
+import { User } from '../../entities/user.entity';
 import { UserDTO } from './dto/user.dto';
 import { IUser } from './interfaces/user.interface';
-import FileUpload from '../../utils/file';
+import FileUpload from '../../utils/file.utils';
 import { FileDTO } from '../file/dto/file.dto';
-//import { File } from 'src/entities/file.entity';
 import { FileService } from '../file/file.service';
-import { IFile } from 'src/interfaces/file.interface';
+import { IFile } from '../file/interfaces/file.interface';
+import StandardError from '../../utils/error.utils';
+import { CompanyService } from '../company/company.service';
+import { DatabaseUtils } from '../../utils/database.utils';
+import { EmailUtils } from '../../utils/email.utils';
 
 @Injectable()
 export class UserService {
+  private emailUtils: EmailUtils;
+  private databaseUtils: DatabaseUtils;
+
   constructor(
     @Inject('USER_REPOSITORY')
     private userRepository: Repository<User>,
     private fileRepository: FileService,
-  ) {}
+    private companyService: CompanyService,
+  ) {
+    this.emailUtils = new EmailUtils(this.userRepository);
+    this.databaseUtils = new DatabaseUtils(this.companyService);
+  }
 
-  async findAll(): Promise<IUser[]> {
+  public async findOne(id: string): Promise<IUser> {
+    const user = await this.userRepository.findOne({
+      where: { id },
+    });
+
+    let userAux = new UserDTO({ ...user }, user.id);
+
+    userAux.file = await this.fileRepository.findByKey('ownerId', id);
+
+    Object.assign(user, userAux);
+
+    return user;
+  }
+
+  public async findAll(): Promise<IUser[]> {
     const users = await this.userRepository.find();
 
     for (const user of users) {
-      user.file = await this.fileRepository.findByKey('ownerId', user.id);
+      let userAux = new UserDTO({ ...user }, user.id).hideSensitiveData();
+      userAux.file = await this.fileRepository.findByKey('ownerId', user.id);
+
+      Object.assign(user, userAux);
     }
 
     return users;
   }
 
-  async findByKey(key: string, value: string): Promise<IUser> {
+  public async findByKey(
+    key: string,
+    value: string,
+    encodeSensitiveData: boolean = true,
+  ): Promise<IUser> {
     const user = await this.userRepository.findOne({
       where: { [key]: value },
     });
 
+    let userAux;
+
+    if (encodeSensitiveData) {
+      userAux = new UserDTO({ ...user }, user.id).encodeSensitiveData();
+    } else {
+      userAux = new UserDTO({ ...user }, user.id);
+    }
+
     if (user)
-      user.file = await this.fileRepository.findByKey('ownerId', user.id);
+      userAux.file = await this.fileRepository.findByKey('ownerId', user.id);
+
+    Object.assign(user, userAux);
 
     return user;
   }
 
-  async create(user: UserDTO, files: FileDTO[]): Promise<IUser> {
+  public async create(user: UserDTO, files: FileDTO[]): Promise<IUser> {
+    if (await this.emailUtils.checkEmailAlreadyExists(user.email))
+      throw new StandardError(202, 'Email already exists');
+
+    //this.databaseUtils.checkIfCreateNewDatabase(user.companyName);
+
     const filesPaths = await FileUpload.upload(files, user.id, 'user');
 
     await this.fileRepository.create(filesPaths);
@@ -46,7 +92,14 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-  async update(id: string, user: UserDTO, files: FileDTO[]): Promise<IUser> {
+  public async update(
+    id: string,
+    user: UserDTO,
+    files: FileDTO[],
+  ): Promise<IUser> {
+    if (await this.emailUtils.checkEmailAlreadyExists(user.email))
+      throw new Error('Email already exists');
+
     const userAvatar: IFile = await this.fileRepository.findByKey(
       'ownerId',
       id,
@@ -67,7 +120,7 @@ export class UserService {
     return await this.userRepository.findOne(id);
   }
 
-  async destroy(id: string): Promise<void> {
+  public async destroy(id: string): Promise<void> {
     const userAvatar: IFile = await this.fileRepository.findByKey(
       'ownerId',
       id,

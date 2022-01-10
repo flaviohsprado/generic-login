@@ -6,8 +6,11 @@ const swagger_1 = require("@nestjs/swagger");
 require("reflect-metadata");
 const common_1 = require("@nestjs/common");
 const helmet = require("helmet");
+const grpc_user_options_1 = require("./modules/user/grpc/grpc-user.options");
+const exception_filter_1 = require("./filters/exception.filter");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    const port = process.env.PORT || 3000;
     const config = new swagger_1.DocumentBuilder()
         .setTitle('Generic Login')
         .setDescription('The basic generic login for your front-end project')
@@ -23,7 +26,10 @@ async function bootstrap() {
         optionsSuccessStatus: 200,
     });
     app.use(helmet());
-    await app.listen(process.env.PORT || 3000);
+    app.useGlobalFilters(new exception_filter_1.AllExceptionsFilter());
+    app.connectMicroservice(grpc_user_options_1.grpcUserOptions);
+    await app.startAllMicroservices();
+    await app.listen(port);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

@@ -1,9 +1,18 @@
-import { createConnection } from 'typeorm';
-import { join } from 'path';
+import { Connection, createConnection } from 'typeorm';
+import { connectionOptions } from './ormconfig';
 
 require('dotenv').config();
 
 export const databaseProviders = [
+  {
+    provide: 'DATABASE_CONNECTION',
+    useFactory(): Promise<Connection> {
+      return createConnection(connectionOptions);
+    },
+  },
+];
+
+/*export const databaseProviders = [
   {
     provide: 'DATABASE_CONNECTION',
 
@@ -26,11 +35,14 @@ export const databaseProviders = [
         },
         synchronize: true,
         ssl: process.env.ENVIOREMENT === 'dev' ? false : true,
-        extra: {
-          ssl: {
-            rejectUnauthorized: false,
-          },
-        },
+        extra:
+          process.env.ENVIOREMENT === 'prod'
+            ? {
+                ssl: {
+                  rejectUnauthorized: false,
+                },
+              }
+            : {},
       }),
   },
-];
+];*/

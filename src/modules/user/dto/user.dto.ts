@@ -1,7 +1,8 @@
 import { uuid } from 'uuidv4';
 import { ApiProperty } from '@nestjs/swagger';
-import Cryptography from 'src/services/criptography.service';
+import CryptographyService from '../../../services/criptography.service';
 import { IsEmail, IsMobilePhone, IsNotEmpty } from 'class-validator';
+import { File } from 'src/entities/file.entity';
 
 export class UserDTO {
   @ApiProperty()
@@ -69,6 +70,14 @@ export class UserDTO {
   @ApiProperty({
     required: false,
   })
+  companyId?: string;
+
+  @ApiProperty()
+  companyName?: string;
+
+  @ApiProperty({
+    required: false,
+  })
   createdAt: Date;
 
   @ApiProperty({
@@ -76,8 +85,13 @@ export class UserDTO {
   })
   updatedAt: Date;
 
+  file: File;
+
   constructor(
-    props: Omit<UserDTO, 'id' | 'createdAt' | 'updatedAt'>,
+    props: Omit<
+      UserDTO,
+      'encryptPassword' | 'hideSensitiveData' | 'encodeSensitiveData'
+    >,
     id?: string,
   ) {
     Object.assign(this, props);
@@ -89,8 +103,41 @@ export class UserDTO {
     }
   }
 
-  async encryptPassword(): Promise<UserDTO> {
-    this.password = await Cryptography.encrypt(this.password);
+  public async encryptPassword(): Promise<UserDTO> {
+    this.password = await CryptographyService.encrypt(this.password);
     return this;
+  }
+
+  public hideSensitiveData(): UserDTO {
+    this.password = null;
+    this.token = null;
+    this.createdAt = null;
+    this.updatedAt = null;
+    this.dateOfBirth = null;
+    this.phoneNumber = null;
+
+    return this;
+  }
+
+  public encodeSensitiveData(): UserDTO {
+    this.id = '##########';
+    this.password = '******';
+    this.token = null;
+    this.createdAt = null;
+    this.updatedAt = null;
+    this.dateOfBirth = null;
+    this.phoneNumber =
+      this.phoneNumber === undefined
+        ? ''
+        : this.formatPhoneNumber(this.phoneNumber);
+
+    return this;
+  }
+
+  private formatPhoneNumber(phoneNumber: string): string {
+    phoneNumber =
+      phoneNumber.substring(0, 3) + '******' + phoneNumber.substring(9);
+
+    return phoneNumber;
   }
 }

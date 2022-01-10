@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.S3Service = void 0;
 const aws_sdk_1 = require("aws-sdk");
 const common_1 = require("@nestjs/common");
-const file_interface_1 = require("../../interfaces/file.interface");
 const s3_config_1 = require("./s3.config");
 const file_dto_1 = require("../../modules/file/dto/file.dto");
 let S3Service = class S3Service {

@@ -5,9 +5,12 @@ import 'reflect-metadata';
 import { ValidationPipe } from '@nestjs/common';
 import * as helmet from 'helmet';
 import * as csurf from 'csurf';
+import { grpcUserOptions } from './modules/user/grpc/grpc-user.options';
+import { AllExceptionsFilter } from './filters/exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const port = process.env.PORT || 3000;
 
   const config = new DocumentBuilder()
     .setTitle('Generic Login')
@@ -28,7 +31,10 @@ async function bootstrap() {
 
   app.use(helmet());
   //app.use(csurf());
+  app.useGlobalFilters(new AllExceptionsFilter());
+  app.connectMicroservice(grpcUserOptions);
 
-  await app.listen(process.env.PORT || 3000);
+  await app.startAllMicroservices();
+  await app.listen(port);
 }
 bootstrap();

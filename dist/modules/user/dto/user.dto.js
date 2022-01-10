@@ -14,6 +14,7 @@ const uuidv4_1 = require("uuidv4");
 const swagger_1 = require("@nestjs/swagger");
 const criptography_service_1 = require("../../../services/criptography.service");
 const class_validator_1 = require("class-validator");
+const file_entity_1 = require("../../../entities/file.entity");
 class UserDTO {
     constructor(props, id) {
         Object.assign(this, props);
@@ -26,6 +27,33 @@ class UserDTO {
     async encryptPassword() {
         this.password = await criptography_service_1.default.encrypt(this.password);
         return this;
+    }
+    hideSensitiveData() {
+        this.password = null;
+        this.token = null;
+        this.createdAt = null;
+        this.updatedAt = null;
+        this.dateOfBirth = null;
+        this.phoneNumber = null;
+        return this;
+    }
+    encodeSensitiveData() {
+        this.id = '##########';
+        this.password = '******';
+        this.token = null;
+        this.createdAt = null;
+        this.updatedAt = null;
+        this.dateOfBirth = null;
+        this.phoneNumber =
+            this.phoneNumber === undefined
+                ? ''
+                : this.formatPhoneNumber(this.phoneNumber);
+        return this;
+    }
+    formatPhoneNumber(phoneNumber) {
+        phoneNumber =
+            phoneNumber.substring(0, 3) + '******' + phoneNumber.substring(9);
+        return phoneNumber;
     }
 }
 __decorate([
@@ -103,6 +131,16 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], UserDTO.prototype, "token", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        required: false,
+    }),
+    __metadata("design:type", String)
+], UserDTO.prototype, "companyId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", String)
+], UserDTO.prototype, "companyName", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         required: false,

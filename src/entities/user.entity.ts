@@ -6,7 +6,7 @@ export class User {
   @PrimaryColumn()
   id: string;
 
-  @Column({ length: 250 })
+  @Column({ length: 250  })
   username: string;
 
   @Column({ length: 250 })

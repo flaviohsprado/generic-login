@@ -1,12 +1,7 @@
 import { S3 } from 'aws-sdk';
 import { Injectable, Req, Res } from '@nestjs/common';
-import {
-  IFileUploader,
-  IFile,
-  IUploadedFile,
-} from 'src/interfaces/file.interface';
 import { s3Config } from './s3.config';
-import { FileDTO } from 'src/modules/file/dto/file.dto';
+import { FileDTO } from '../../modules/file/dto/file.dto';
 
 @Injectable()
 export class S3Service {

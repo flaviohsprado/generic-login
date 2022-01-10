@@ -10,10 +10,12 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const auth_module_1 = require("./modules/auth/auth.module");
 const user_module_1 = require("./modules/user/user.module");
-const database_module_1 = require("./services/database/database.module");
+const database_module_1 = require("./modules/database/database.module");
 const file_module_1 = require("./modules/file/file.module");
 const auth_middleware_1 = require("./middlewares/auth.middleware");
 const company_module_1 = require("./modules/company/company.module");
+const ormconfig_1 = require("./modules/database/ormconfig");
+const typeorm_1 = require("@nestjs/typeorm");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer.apply(auth_middleware_1.AuthMiddleware).forRoutes('private/users');
@@ -21,7 +23,14 @@ let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [database_module_1.DatabaseModule, file_module_1.FileModule, user_module_1.UserModule, auth_module_1.AuthModule, company_module_1.CompanyModule],
+        imports: [
+            typeorm_1.TypeOrmModule.forRoot(ormconfig_1.connectionOptions),
+            database_module_1.DatabaseModule,
+            file_module_1.FileModule,
+            user_module_1.UserModule,
+            auth_module_1.AuthModule,
+            company_module_1.CompanyModule,
+        ],
     })
 ], AppModule);
 exports.AppModule = AppModule;

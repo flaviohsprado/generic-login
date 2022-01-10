@@ -9,10 +9,10 @@ export class CompanyDTO {
   name: string;
 
   @IsEmail()
-  email: string;
+  email?: string;
 
   @IsNotEmpty()
-  website: string;
+  website?: string;
 
   @IsNotEmpty()
   address?: string;
@@ -21,7 +21,7 @@ export class CompanyDTO {
   phone?: string;
 
   @IsNotEmpty()
-  colorPalette: string;
+  colorPalette?: string;
   createdAt?: Date;
   updatedAt?: Date;
 
@@ -30,8 +30,6 @@ export class CompanyDTO {
     id?: string,
   ) {
     Object.assign(this, props);
-
-    console.log(id);
 
     if (!id) {
       this.id = uuid();

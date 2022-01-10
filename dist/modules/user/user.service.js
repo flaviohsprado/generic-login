@@ -15,43 +15,72 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("typeorm");
-const user_entity_1 = require("../../entities/user.entity");
-const file_1 = require("../../utils/file");
+const user_dto_1 = require("./dto/user.dto");
+const file_utils_1 = require("../../utils/file.utils");
 const file_service_1 = require("../file/file.service");
-const file_interface_1 = require("../../interfaces/file.interface");
+const error_utils_1 = require("../../utils/error.utils");
+const company_service_1 = require("../company/company.service");
+const database_utils_1 = require("../../utils/database.utils");
+const email_utils_1 = require("../../utils/email.utils");
 let UserService = class UserService {
-    constructor(userRepository, fileRepository) {
+    constructor(userRepository, fileRepository, companyService) {
         this.userRepository = userRepository;
         this.fileRepository = fileRepository;
+        this.companyService = companyService;
+        this.emailUtils = new email_utils_1.EmailUtils(this.userRepository);
+        this.databaseUtils = new database_utils_1.DatabaseUtils(this.companyService);
+    }
+    async findOne(id) {
+        const user = await this.userRepository.findOne({
+            where: { id },
+        });
+        let userAux = new user_dto_1.UserDTO(Object.assign({}, user), user.id);
+        userAux.file = await this.fileRepository.findByKey('ownerId', id);
+        Object.assign(user, userAux);
+        return user;
     }
     async findAll() {
         const users = await this.userRepository.find();
         for (const user of users) {
-            user.file = await this.fileRepository.findByKey('ownerId', user.id);
+            let userAux = new user_dto_1.UserDTO(Object.assign({}, user), user.id).hideSensitiveData();
+            userAux.file = await this.fileRepository.findByKey('ownerId', user.id);
+            Object.assign(user, userAux);
         }
         return users;
     }
-    async findByKey(key, value) {
+    async findByKey(key, value, encodeSensitiveData = true) {
         const user = await this.userRepository.findOne({
             where: { [key]: value },
         });
+        let userAux;
+        if (encodeSensitiveData) {
+            userAux = new user_dto_1.UserDTO(Object.assign({}, user), user.id).encodeSensitiveData();
+        }
+        else {
+            userAux = new user_dto_1.UserDTO(Object.assign({}, user), user.id);
+        }
         if (user)
-            user.file = await this.fileRepository.findByKey('ownerId', user.id);
+            userAux.file = await this.fileRepository.findByKey('ownerId', user.id);
+        Object.assign(user, userAux);
         return user;
     }
     async create(user, files) {
-        const filesPaths = await file_1.default.upload(files, user.id, 'user');
+        if (await this.emailUtils.checkEmailAlreadyExists(user.email))
+            throw new error_utils_1.default(202, 'Email already exists');
+        const filesPaths = await file_utils_1.default.upload(files, user.id, 'user');
         await this.fileRepository.create(filesPaths);
         return await this.userRepository.save(user);
     }
     async update(id, user, files) {
+        if (await this.emailUtils.checkEmailAlreadyExists(user.email))
+            throw new Error('Email already exists');
         const userAvatar = await this.fileRepository.findByKey('ownerId', id);
         if (files.length) {
             if (userAvatar) {
-                await file_1.default.delete([userAvatar.key]);
+                await file_utils_1.default.delete([userAvatar.key]);
                 await this.fileRepository.destroy([userAvatar]);
             }
-            const filesPaths = await file_1.default.upload(files, id, 'user');
+            const filesPaths = await file_utils_1.default.upload(files, id, 'user');
             await this.fileRepository.create(filesPaths);
         }
         await this.userRepository.save(Object.assign(Object.assign({}, user), { id }));
@@ -59,7 +88,7 @@ let UserService = class UserService {
     }
     async destroy(id) {
         const userAvatar = await this.fileRepository.findByKey('ownerId', id);
-        await file_1.default.delete([userAvatar.key]);
+        await file_utils_1.default.delete([userAvatar.key]);
         await this.fileRepository.destroy([userAvatar]);
         await this.userRepository.delete(id);
     }
@@ -68,7 +97,8 @@ UserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)('USER_REPOSITORY')),
     __metadata("design:paramtypes", [typeorm_1.Repository,
-        file_service_1.FileService])
+        file_service_1.FileService,
+        company_service_1.CompanyService])
 ], UserService);
 exports.UserService = UserService;
 //# sourceMappingURL=user.service.js.map

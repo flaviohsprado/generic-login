@@ -10,7 +10,7 @@ exports.FileModule = void 0;
 const common_1 = require("@nestjs/common");
 const file_service_1 = require("./file.service");
 const file_provider_1 = require("./file.provider");
-const database_module_1 = require("../../services/database/database.module");
+const database_module_1 = require("../database/database.module");
 let FileModule = class FileModule {
 };
 FileModule = __decorate([

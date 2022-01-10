@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { FileDTO } from './dto/file.dto';
-import { IFile } from 'src/interfaces/file.interface';
+import { IFile } from './interfaces/file.interface';
 export declare class FileService {
     private fileRepository;
     constructor(fileRepository: Repository<IFile>);

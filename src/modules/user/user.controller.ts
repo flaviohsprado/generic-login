@@ -7,22 +7,35 @@ import {
   Param,
   Delete,
   UseGuards,
-  Headers,
   UseInterceptors,
   UploadedFiles,
   Req,
 } from '@nestjs/common';
+import {
+  GrpcMethod,
+  ClientGrpc,
+  Client,
+  Transport,
+} from '@nestjs/microservices';
 import { UserDTO } from './dto/user.dto';
 import { IUser } from './interfaces/user.interface';
 import { UserService } from './user.service';
-import { getFormatedDateFromDate } from 'src/utils/date';
-import { JwtAuthGuard } from 'src/services/jwt/jwt-auth.guard';
+import { getFormatedDateFromDate } from '../../utils/date.utils';
+import { JwtAuthGuard } from '../../services/jwt/jwt-auth.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { FileDTO } from '../file/dto/file.dto';
+import { IAuth } from 'src/interfaces/auth.interface';
+import { IAuthRequest } from 'src/interfaces/authRequest.interface';
 
 @Controller('private/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/user')
+  async findOne(@Req() request: IAuthRequest): Promise<IUser> {
+    return await this.userService.findOne(request.user.id);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Get()
@@ -32,12 +45,14 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
+  @GrpcMethod('UserService')
   async findById(@Param('id') id: string): Promise<IUser> {
     return await this.userService.findByKey('id', id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('/email/:email')
+  @GrpcMethod('UserService')
   async findByEmail(@Param('email') email: string): Promise<IUser> {
     return await this.userService.findByKey('email', email);
   }
@@ -111,7 +126,7 @@ export class UserController {
     @Param('id') id: string,
     @Body() user: UserDTO,
   ): Promise<IUser> {
-    const updateUser = await new UserDTO(user).encryptPassword();
+    const updateUser = await new UserDTO(user, id).encryptPassword();
     return await this.userService.update(id, updateUser, files);
   }
 

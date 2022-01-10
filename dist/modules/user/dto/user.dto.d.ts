@@ -1,3 +1,4 @@
+import { File } from 'src/entities/file.entity';
 export declare class UserDTO {
     id: string;
     username: string;
@@ -11,8 +12,14 @@ export declare class UserDTO {
     city?: string;
     country?: string;
     token?: string;
+    companyId?: string;
+    companyName?: string;
     createdAt: Date;
     updatedAt: Date;
-    constructor(props: Omit<UserDTO, 'id' | 'createdAt' | 'updatedAt'>, id?: string);
+    file: File;
+    constructor(props: Omit<UserDTO, 'encryptPassword' | 'hideSensitiveData' | 'encodeSensitiveData'>, id?: string);
     encryptPassword(): Promise<UserDTO>;
+    hideSensitiveData(): UserDTO;
+    encodeSensitiveData(): UserDTO;
+    private formatPhoneNumber;
 }

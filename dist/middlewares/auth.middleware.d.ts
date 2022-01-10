@@ -1,7 +1,8 @@
 import { NestMiddleware } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
+import { IAuthRequest } from 'src/interfaces/authRequest.interface';
 export declare class AuthMiddleware implements NestMiddleware {
     private jwtService;
     constructor();
-    use(req: Request, res: Response, next: NextFunction): void;
+    use(req: IAuthRequest, res: Response, next: NextFunction): void;
 }

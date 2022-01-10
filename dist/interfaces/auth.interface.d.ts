@@ -6,6 +6,6 @@ export interface IAuth {
     companyName: string;
 }
 export interface IAuthCredentials {
-    username: string;
+    email: string;
     password: string;
 }

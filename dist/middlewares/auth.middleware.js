@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthMiddleware = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
+const authRequest_interface_1 = require("../interfaces/authRequest.interface");
 let AuthMiddleware = class AuthMiddleware {
     constructor() {
         this.jwtService = new jwt_1.JwtService({

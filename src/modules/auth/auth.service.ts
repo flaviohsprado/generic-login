@@ -13,10 +13,10 @@ export class AuthService {
   ) {}
 
   async validateUser(
-    username: string,
+    email: string,
     password: string,
   ): Promise<Omit<IUser, 'password'>> {
-    const user = await this.userService.findByKey('username', username);
+    const user = await this.userService.findByKey('email', email, false);
 
     const decriptedPassword: string = await CryptographyService.decrypt(
       password,
@@ -27,12 +27,13 @@ export class AuthService {
 
       return result;
     }
+
     return null;
   }
 
   async login(user: IAuthCredentials) {
     const userValidated: Omit<IUser, 'password'> = await this.validateUser(
-      user.username,
+      user.email,
       user.password,
     );
 

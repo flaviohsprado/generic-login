@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response, NextFunction } from 'express';
+import { IAuthRequest } from 'src/interfaces/authRequest.interface';
 import { IAuth } from '../interfaces/auth.interface';
 
 @Injectable()
@@ -17,8 +18,9 @@ export class AuthMiddleware implements NestMiddleware {
     });
   }
 
-  use(req: Request, res: Response, next: NextFunction) {
+  use(req: IAuthRequest, res: Response, next: NextFunction) {
     if (req.method === 'POST') return next();
+
     if (!req.headers.authorization) throw new UnauthorizedException();
 
     const token = req.headers.authorization.split(' ')[1];

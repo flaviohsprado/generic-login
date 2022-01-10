@@ -1,12 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const handleError = (error, res) => {
-    const { statusCode, message } = error;
-    return {
-        message: message || 'Internal Server Error',
-        statusCode: statusCode || 500,
-        status: 'error',
-    };
-};
-exports.default = handleError;
+class StandardError extends Error {
+    constructor(statusCode, message) {
+        super();
+        this.statusCode = statusCode;
+        this.message = message;
+    }
+}
+exports.default = StandardError;
 //# sourceMappingURL=error.js.map
